@@ -1,9 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { fileURLToPath } from "url";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 const commandsDir = path.resolve(__dirname, "./commands");
 
 fs.readdir(commandsDir, (err, files) => {
@@ -13,9 +10,9 @@ fs.readdir(commandsDir, (err, files) => {
 		return;
 	}
 
-	files.forEach(async (file) => {
+	files.forEach((file) => {
 		if (file.endsWith(".js")) {
-			await import(`./commands/${file}`);
+			require(`./commands/${file}`);
 		}
 	});
 });
