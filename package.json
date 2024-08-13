@@ -8,11 +8,15 @@
 		"src/commands.js",
 		"src/commands/"
 	],
-	"scripts": {
-		"lint": "eslint . --fix"
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/lewishowles/testing.git"
 	},
 	"publishConfig": {
 		"registry": "https://npm.pkg.github.com/"
+	},
+	"scripts": {
+		"lint": "eslint . --fix"
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.9.0",
