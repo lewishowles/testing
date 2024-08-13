@@ -1,18 +1,5 @@
-import fs from "fs";
-import path from "path";
-
-const commandsDir = path.resolve(__dirname, "./commands");
-
-fs.readdir(commandsDir, (err, files) => {
-	if (err) {
-		console.error("Error reading commands directory:", err);
-
-		return;
-	}
-
-	files.forEach((file) => {
-		if (file.endsWith(".js")) {
-			require(`./commands/${file}`);
-		}
-	});
-});
+import "./commands/get-by-data";
+import "./commands/should-be-visible";
+import "./commands/should-have-attribute";
+import "./commands/should-have-count";
+import "./commands/should-have-text";
