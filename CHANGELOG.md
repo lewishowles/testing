@@ -1,10 +1,19 @@
 # Changelog
 
+## 0.2.0
+
+### Cypress
+
+Added two new commands:
+
+- `shouldNotBeVisible()` - Ensure that an element is not visible.
+- `getFormField()` - Get the underlying form field (`input`, `select`, `textarea`) for a previous subject.
+
 ## 0.1.0
 
 ### Cypress
 
-Added 5 initial commands:
+Added five initial commands:
 
 - `getByData(attribute)` - Retrieve an element by its `data-test` attribute.
 - `shouldBeVisible()` - Ensure that an element is visible.

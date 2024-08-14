@@ -16,6 +16,10 @@ Retrieve an element by its `data-test` attribute. For example `[data-test="selec
 
 Ensure that an element is visible.
 
+### `shouldNotBeVisible`
+
+Ensure that an element is not visible.
+
 ### `shouldHaveAttribute(attribute, value)`
 
 Ensure that an element has `attribute` with value `value`.
