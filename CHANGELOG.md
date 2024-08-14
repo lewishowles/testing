@@ -1,6 +1,12 @@
 # Changelog
 
-## 0.2.0
+## 0.2.1 - 2024-08-14
+
+### Cypress
+
+Fixed an incorrect command name that would stop `getFormField` from working.
+
+## 0.2.0 - 2024-08-14
 
 ### Cypress
 
@@ -9,7 +15,7 @@ Added two new commands:
 - `shouldNotBeVisible()` - Ensure that an element is not visible.
 - `getFormField()` - Get the underlying form field (`input`, `select`, `textarea`) for a previous subject.
 
-## 0.1.0
+## 0.1.0 - 2024-08-13
 
 ### Cypress
 
