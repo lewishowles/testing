@@ -1,4 +1,5 @@
 import "./commands/get-by-data";
+import "./commands/get-form-field";
 import "./commands/should-be-visible";
 import "./commands/should-have-attribute";
 import "./commands/should-have-count";

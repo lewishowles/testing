@@ -12,6 +12,10 @@ To use the library in Cypress, simply import the `commands.js` into `cypress/sup
 
 Retrieve an element by its `data-test` attribute. For example `[data-test="selector"]`.
 
+### `getFormField()`
+
+Retrieve the underlying form element (`input`, `select`, `textarea`) for a previous subject.
+
 ### `shouldBeVisible`
 
 Ensure that an element is visible.
