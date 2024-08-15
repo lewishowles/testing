@@ -3,7 +3,5 @@
  * and will pass for a partial match.
  */
 Cypress.Commands.add("shouldHaveText", { prevSubject: "element" }, (subject, text) => {
-	const elementText = subject.text();
-
-	expect(elementText).to.include(text);
+	return cy.wrap(subject).should("contain.text", text);
 });
