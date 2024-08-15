@@ -26,7 +26,7 @@ Ensure that an element is not visible.
 
 ### `shouldHaveAttribute(attribute, value)`
 
-Ensure that an element has `attribute` with value `value`.
+Ensure that an element has `attribute` with value `value`. If no value is provided, the existence of `attribute` is checked.
 
 ### `shouldHaveCount(count)`
 

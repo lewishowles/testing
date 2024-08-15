@@ -1,5 +1,6 @@
 # Changelog
 
+- `getFormField` can now be used without a previous element, in which case a provided selector will be used to first select the element, then find a form field within it.
 ## 0.2.1 - 2024-08-14
 
 ### Cypress
