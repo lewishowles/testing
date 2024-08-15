@@ -1,6 +1,12 @@
 # Changelog
 
+## 0.3.0 - 2024-08-15
+
+### Cypress
+
+- `shouldHaveAttribute` can now accept only an attribute, in which case the existence of that attribute is checked.
 - `getFormField` can now be used without a previous element, in which case a provided selector will be used to first select the element, then find a form field within it.
+
 ## 0.2.1 - 2024-08-14
 
 ### Cypress
