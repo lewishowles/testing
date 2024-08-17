@@ -28,6 +28,10 @@ Ensure that an element is visible.
 
 Ensure that an element is not visible.
 
+### `shouldHaveClass(className)`
+
+Ensure that an element has the given `className`.
+
 ### `shouldHaveAttribute(attribute, value)`
 
 Ensure that an element has `attribute` with value `value`. If no value is provided, the existence of `attribute` is checked.

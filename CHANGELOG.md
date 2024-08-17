@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.4.0 - 2024-08-17
+
+### Cypress
+
+Added one new command:
+
+- `shouldHaveClass(className)` - Ensure that an element has the given `className`.
+
 ## 0.3.0 - 2024-08-15
 
 ### Cypress
