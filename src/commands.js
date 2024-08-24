@@ -6,3 +6,6 @@ import "./commands/should-have-class";
 import "./commands/should-have-count";
 import "./commands/should-have-text";
 import "./commands/should-not-be-visible";
+import "./commands/should-not-have-attribute";
+import "./commands/should-not-have-class";
+import "./commands/should-not-have-text";

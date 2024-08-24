@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.5.0 - 2024-08-24
+
+### Cypress
+
+Added three new commands:
+
+- `shouldNotHaveClass(className)` - Ensure that an element does not have the given `className`.
+- `shouldNotHaveAttribute(attribute, value)` - Ensure that an element does not have an `attribute` with a given `value`.
+- `shouldNotHaveText(text)` - Ensure that the element does not _contain_ the given `text` (including partial matches).
+
 ## 0.4.0 - 2024-08-17
 
 ### Cypress

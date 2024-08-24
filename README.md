@@ -32,9 +32,17 @@ Ensure that an element is not visible.
 
 Ensure that an element has the given `className`.
 
+### `shouldNotHaveClass(className)`
+
+Ensure that an element does not have the given `className`.
+
 ### `shouldHaveAttribute(attribute, value)`
 
 Ensure that an element has `attribute` with value `value`. If no value is provided, the existence of `attribute` is checked.
+
+### `shouldNotHaveAttribute(attribute, value)`
+
+Ensure that an element does not have `attribute` with value `value`. If no value is provided, the existence of `attribute` is checked.
 
 ### `shouldHaveCount(count)`
 
@@ -43,3 +51,7 @@ Ensure that there are `count` elements.
 ### `shouldHaveText(text)`
 
 Ensure that an element _contains_ the given `text` (including partial matches).
+
+### `shouldNotHaveText(text)`
+
+Ensure that an element does not _contain_ the given `text` (including partial matches).
