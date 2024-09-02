@@ -20,6 +20,18 @@ Retrieve the underlying form element (`input`, `select`, `textarea`) for a previ
 
 Retrieve the element via `getByData`, then find the underlying form element.
 
+### `element.fillFormField(value)`
+
+Retrieve the underlying form element (`input`, `select`, `textarea`) for a previous subject and fill it with the text `value`.
+
+### `cy.fillFormField(selector, value)`
+
+Retrieve the element via `getByData`, then find the underlying form element, and fill it with `value`.
+
+### `shouldHaveValue`
+
+Ensure that a previous form field has `value`.
+
 ### `shouldBeVisible`
 
 Ensure that an element is visible.

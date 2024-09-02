@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.6.0 - 2024-09-02
+
+### Cypress
+
+Added two new commands:
+
+- `fillFormField(selector, value)` - Fill a text-based form field with `data-test` attribute `selector` with `value`.
+- `shouldHaveValue(value)` - Ensure that a previous form field has `value`.
+
 ## 0.5.0 - 2024-08-24
 
 ### Cypress
@@ -23,7 +32,7 @@ Added one new command:
 ### Cypress
 
 - `shouldHaveAttribute` can now accept only an attribute, in which case the existence of that attribute is checked.
-- `getFormField` can now be used without a previous element, in which case a provided selector will be used to first select the element, then find a form field within it.
+- `getFormField(selector)` can now be used without a previous element, in which case a provided selector will be used to first select the element, then find a form field within it.
 
 ## 0.2.1 - 2024-08-14
 
@@ -46,7 +55,7 @@ Added two new commands:
 
 Added five initial commands:
 
-- `getByData(attribute)` - Retrieve an element by its `data-test` attribute.
+- `getByData(selector)` - Retrieve an element by its `data-test` attribute.
 - `shouldBeVisible()` - Ensure that an element is visible.
 - `shouldHaveAttribute(attribute, value)` - Ensure that an element has an `attribute` with a given `value`.
 - `shouldHaveCount(count)` - Ensure that there are `count` elements.
