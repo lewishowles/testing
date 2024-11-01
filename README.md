@@ -30,40 +30,48 @@ Retrieve the element via `getByData`, then find the underlying form element, and
 
 ### `shouldHaveValue`
 
-Ensure that a previous form field has `value`.
+Assert that a previous form field has `value`.
 
 ### `shouldBeVisible`
 
-Ensure that an element is visible.
+Assert that an element is visible.
 
 ### `shouldNotBeVisible`
 
-Ensure that an element is not visible.
+Assert that an element is not visible.
 
 ### `shouldHaveClass(className)`
 
-Ensure that an element has the given `className`.
+Assert that an element has the given `className`.
 
 ### `shouldNotHaveClass(className)`
 
-Ensure that an element does not have the given `className`.
+Assert that an element does not have the given `className`.
 
 ### `shouldHaveAttribute(attribute, value)`
 
-Ensure that an element has `attribute` with value `value`. If no value is provided, the existence of `attribute` is checked.
+Assert that an element has `attribute` with value `value`. If no value is provided, the existence of `attribute` is checked.
 
 ### `shouldNotHaveAttribute(attribute, value)`
 
-Ensure that an element does not have `attribute` with value `value`. If no value is provided, the existence of `attribute` is checked.
+Assert that an element does not have `attribute` with value `value`. If no value is provided, the existence of `attribute` is checked.
 
 ### `shouldHaveCount(count)`
 
-Ensure that there are `count` elements.
+Assert that there are `count` elements.
 
 ### `shouldHaveText(text)`
 
-Ensure that an element _contains_ the given `text` (including partial matches).
+Assert that an element _contains_ the given `text` (including partial matches).
 
 ### `shouldNotHaveText(text)`
 
-Ensure that an element does not _contain_ the given `text` (including partial matches).
+Assert that an element does not _contain_ the given `text` (including partial matches).
+
+### `shouldHaveFocus()`
+
+Assert that an element has the current focus.
+
+### `shouldNotHaveFocus()`
+
+Assert that an element does not have the current focus.

@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.7.0 - 2024-11-01
+
+### Cypress
+
+Added two new commands:
+
+- `shouldHaveFocus()` - Assert that an element has focus in the document.
+- `shouldNotHaveFocus()` - Assert that an element does not have focus in the document.
+
 ## 0.6.0 - 2024-09-02
 
 ### Cypress
@@ -7,7 +16,7 @@
 Added two new commands:
 
 - `fillFormField(selector, value)` - Fill a text-based form field with `data-test` attribute `selector` with `value`.
-- `shouldHaveValue(value)` - Ensure that a previous form field has `value`.
+- `shouldHaveValue(value)` - Assert that a previous form field has `value`.
 
 ## 0.5.0 - 2024-08-24
 
@@ -15,9 +24,9 @@ Added two new commands:
 
 Added three new commands:
 
-- `shouldNotHaveClass(className)` - Ensure that an element does not have the given `className`.
-- `shouldNotHaveAttribute(attribute, value)` - Ensure that an element does not have an `attribute` with a given `value`.
-- `shouldNotHaveText(text)` - Ensure that the element does not _contain_ the given `text` (including partial matches).
+- `shouldNotHaveClass(className)` - Assert that an element does not have the given `className`.
+- `shouldNotHaveAttribute(attribute, value)` - Assert that an element does not have an `attribute` with a given `value`.
+- `shouldNotHaveText(text)` - Assert that the element does not _contain_ the given `text` (including partial matches).
 
 ## 0.4.0 - 2024-08-17
 
@@ -25,7 +34,7 @@ Added three new commands:
 
 Added one new command:
 
-- `shouldHaveClass(className)` - Ensure that an element has the given `className`.
+- `shouldHaveClass(className)` - Assert that an element has the given `className`.
 
 ## 0.3.0 - 2024-08-15
 
@@ -46,7 +55,7 @@ Fixed an incorrect command name that would stop `getFormField` from working.
 
 Added two new commands:
 
-- `shouldNotBeVisible()` - Ensure that an element is not visible.
+- `shouldNotBeVisible()` - Assert that an element is not visible.
 - `getFormField()` - Get the underlying form field (`input`, `select`, `textarea`) for a previous subject.
 
 ## 0.1.0 - 2024-08-13
@@ -56,7 +65,7 @@ Added two new commands:
 Added five initial commands:
 
 - `getByData(selector)` - Retrieve an element by its `data-test` attribute.
-- `shouldBeVisible()` - Ensure that an element is visible.
-- `shouldHaveAttribute(attribute, value)` - Ensure that an element has an `attribute` with a given `value`.
-- `shouldHaveCount(count)` - Ensure that there are `count` elements.
-- `shouldHaveText(text)` - Ensure that the element _contains_ the given `text` (including partial matches).
+- `shouldBeVisible()` - Assert that an element is visible.
+- `shouldHaveAttribute(attribute, value)` - Assert that an element has an `attribute` with a given `value`.
+- `shouldHaveCount(count)` - Assert that there are `count` elements.
+- `shouldHaveText(text)` - Assert that the element _contains_ the given `text` (including partial matches).
