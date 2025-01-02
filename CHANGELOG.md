@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.8.0 - 2025-01-02
+
+### Cypress
+
+Added one new commands:
+
+- `shouldNotExist()` - Assert that an element does not exist on the page.
+
 ## 0.7.0 - 2024-11-01
 
 ### Cypress

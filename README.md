@@ -40,6 +40,10 @@ Assert that an element is visible.
 
 Assert that an element is not visible.
 
+### `shouldNotExist`
+
+Assert that an element does not exist.
+
 ### `shouldHaveClass(className)`
 
 Assert that an element has the given `className`.

@@ -10,6 +10,7 @@ import "./commands/should-have-focus";
 import "./commands/should-have-text";
 import "./commands/should-have-value";
 import "./commands/should-not-be-visible";
+import "./commands/should-not-exist";
 import "./commands/should-not-have-attribute";
 import "./commands/should-not-have-class";
 import "./commands/should-not-have-focus";
