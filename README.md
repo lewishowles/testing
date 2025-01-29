@@ -32,6 +32,14 @@ Retrieve the element via `getByData`, then find the underlying form element, and
 
 Assert that a previous form field has `value`.
 
+### `shouldBeChecked`
+
+Assert that a checkbox is checked, automatically finding an inner checkbox is the previous subject is not itself a checkbox.
+
+### `shouldNotBeChecked`
+
+Assert that a checkbox is not checked, automatically finding an inner checkbox is the previous subject is not itself a checkbox.
+
 ### `shouldBeVisible`
 
 Assert that an element is visible.

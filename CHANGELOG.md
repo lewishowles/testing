@@ -1,10 +1,19 @@
 # Changelog
 
+## 0.9.0 - 2025-01-29
+
+### Cypress
+
+Added two new commands:
+
+- `shouldBeChecked()` - Assert that a checkbox (or checkbox contained in the element) is checked.
+- `shouldNotBeChecked()` - Assert that a checkbox (or checkbox contained in the element) is not checked.
+
 ## 0.8.0 - 2025-01-02
 
 ### Cypress
 
-Added one new commands:
+Added one new command:
 
 - `shouldNotExist()` - Assert that an element does not exist on the page.
 
