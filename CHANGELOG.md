@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.9.1 - 2025-10-21
+
+### Cypress
+
+Minor change to the way commands are imported, which should fix error "failed to resolve only because it was resolved as fully specified".
+
 ## 0.9.0 - 2025-01-29
 
 ### Cypress

@@ -1,6 +1,6 @@
 {
 	"name": "@lewishowles/testing",
-	"version": "0.9.0",
+	"version": "0.9.1",
 	"description": "A library of beautiful components, promoting rapid development, while ensuring that usability and accessibility are at the fore.",
 	"module": "index.js",
 	"type": "module",
