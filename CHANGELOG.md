@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.10.0 - 2025-10-27
+
+### Cypress
+
+Added one new command:
+
+- `getComponent()` - Used to easily retrieve the mounted component in Cypress component testing. e.g. `cy.getComponent().then(component => { ... });`
+
 ## 0.9.1 - 2025-10-21
 
 ### Cypress
