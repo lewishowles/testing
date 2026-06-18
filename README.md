@@ -1,89 +1,18 @@
-# Testing
+# `@lewishowles/testing`
 
-Supercharge Cypress and Vitest testing with super-handy helpers for everything from selecting and counting elements to API mocking.
+Shared testing conventions and utilities for Lewis Howles projects, covering Vitest, Vue/component tests, and Playwright.
 
-## Cypress
+## Status
 
-To use the library in Cypress, simply import the `commands.js` into `cypress/support/commands.js`. For example:
+Version 1.0.0 — Cypress surface removed. Vitest, Vue, and Playwright helpers are in progress.
 
-`import @lewishowles/testing/src/commands.js`;
+## Planned exports
 
-### `getByData(selector)`
+| Subpath                           | Purpose                                                                                          |
+| --------------------------------- | ------------------------------------------------------------------------------------------------ |
+| `@lewishowles/testing/vitest`     | Browser API mocks, Pinia setup, mount cleanup, API mock factories, console suppression           |
+| `@lewishowles/testing/vue`        | `createMount` (unit), `cleanupMountedWrappers`, `withAppContext`, slot helpers                   |
+| `@lewishowles/testing/playwright` | Shared config presets, `createMount` (CT), route interceptors, accessibility interaction helpers |
+| `@lewishowles/testing/recipes`    | Agent-facing recipes — what/how/what not to test, per component type                             |
 
-Retrieve an element by its `data-test` attribute. For example `[data-test="selector"]`.
-
-### `element.getFormField()`
-
-Retrieve the underlying form element (`input`, `select`, `textarea`) for a previous subject.
-
-### `cy.getFormField(selector)`
-
-Retrieve the element via `getByData`, then find the underlying form element.
-
-### `element.fillFormField(value)`
-
-Retrieve the underlying form element (`input`, `select`, `textarea`) for a previous subject and fill it with the text `value`.
-
-### `cy.fillFormField(selector, value)`
-
-Retrieve the element via `getByData`, then find the underlying form element, and fill it with `value`.
-
-### `shouldHaveValue`
-
-Assert that a previous form field has `value`.
-
-### `shouldBeChecked`
-
-Assert that a checkbox is checked, automatically finding an inner checkbox is the previous subject is not itself a checkbox.
-
-### `shouldNotBeChecked`
-
-Assert that a checkbox is not checked, automatically finding an inner checkbox is the previous subject is not itself a checkbox.
-
-### `shouldBeVisible`
-
-Assert that an element is visible.
-
-### `shouldNotBeVisible`
-
-Assert that an element is not visible.
-
-### `shouldNotExist`
-
-Assert that an element does not exist.
-
-### `shouldHaveClass(className)`
-
-Assert that an element has the given `className`.
-
-### `shouldNotHaveClass(className)`
-
-Assert that an element does not have the given `className`.
-
-### `shouldHaveAttribute(attribute, value)`
-
-Assert that an element has `attribute` with value `value`. If no value is provided, the existence of `attribute` is checked.
-
-### `shouldNotHaveAttribute(attribute, value)`
-
-Assert that an element does not have `attribute` with value `value`. If no value is provided, the existence of `attribute` is checked.
-
-### `shouldHaveCount(count)`
-
-Assert that there are `count` elements.
-
-### `shouldHaveText(text)`
-
-Assert that an element _contains_ the given `text` (including partial matches).
-
-### `shouldNotHaveText(text)`
-
-Assert that an element does not _contain_ the given `text` (including partial matches).
-
-### `shouldHaveFocus()`
-
-Assert that an element has the current focus.
-
-### `shouldNotHaveFocus()`
-
-Assert that an element does not have the current focus.
+No exports ship yet. Subpaths will be added as each phase lands.
