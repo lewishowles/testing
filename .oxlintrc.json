@@ -43,6 +43,14 @@
 
 		"vite-plus/prefer-vite-plus-imports": "error"
 	},
+	"overrides": [
+		{
+			"files": ["src/playwright/**/*.js", "vite.config.js", "vitest.config.js"],
+			"env": {
+				"node": true
+			}
+		}
+	],
 	"options": {
 		"typeAware": false,
 		"typeCheck": false

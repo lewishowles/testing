@@ -1,4 +1,5 @@
 import { mount, shallowMount, RouterLinkStub } from "@vue/test-utils";
+import { deepMerge } from "@lewishowles/helpers/object";
 
 // All wrappers mounted during a test run, used to clean up after each test.
 const mountedWrappers = [];
@@ -89,67 +90,4 @@ export function cleanupMountedWrappers() {
 	});
 
 	mountedWrappers.length = 0;
-}
-
-// --- Internal helpers ---
-
-/**
- * Recursively merges two or more objects. Later sources override earlier ones.
- *
- * @param  {object}  target
- *     The base object to merge into.
- * @param  {...object}  sources
- *     One or more objects whose values are merged onto the target.
- */
-function deepMerge(target, ...sources) {
-	if (!sources.length) {
-		return target;
-	}
-
-	const source = sources.shift();
-
-	if (!isObject(target) || !isObject(source)) {
-		return deepMerge(target, ...sources);
-	}
-
-	const result = { ...target };
-
-	for (const key in source) {
-		if (mismatchingTypes(result[key], source[key])) {
-			result[key] = source[key];
-		} else if (isObject(source[key])) {
-			result[key] = deepMerge(result[key] ?? {}, source[key]);
-		} else {
-			result[key] = source[key];
-		}
-	}
-
-	return deepMerge(result, ...sources);
-}
-
-/**
- * Returns true if the value is a plain non-null, non-array object.
- *
- * @param  {any}  value
- *     The value to check.
- */
-function isObject(value) {
-	return value !== null && typeof value === "object" && !Array.isArray(value);
-}
-
-/**
- * Returns true when the target and source values have incompatible types,
- * meaning the source value should replace the target rather than be merged.
- *
- * @param  {any}  targetValue
- *     The value currently in the target object.
- * @param  {any}  sourceValue
- *     The value from the source object.
- */
-function mismatchingTypes(targetValue, sourceValue) {
-	return (
-		typeof targetValue !== typeof sourceValue ||
-		Array.isArray(targetValue) !== Array.isArray(sourceValue) ||
-		isObject(targetValue) !== isObject(sourceValue)
-	);
 }
