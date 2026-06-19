@@ -55,7 +55,7 @@ const mount = createDeepMount(MyForm);
 
 Unmounts every wrapper created by `createMount` or `createDeepMount` in the current suite, then clears the tracking list.
 
-Call in `afterEach` to prevent `@vueuse/core` event listeners from accumulating across tests.
+Call in `afterEach` to prevent things like `@vueuse/core` event listeners from accumulating across tests.
 
 ```js
 afterEach(cleanupMountedWrappers);

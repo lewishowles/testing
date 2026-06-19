@@ -1,5 +1,37 @@
 # Changelog
 
+## 1.0.0 — 2026-06-19
+
+Given the recent migration from Cypress to Playwright, this version re-architects everything from the ground up, providing useful features for Vitest, Vue, and Playwright.
+
+### `@lewishowles/testing/vue`
+
+Utilities for mounting Vue components in Vitest:
+
+- `createMount` — returns a mount function for a single component, using `shallowMount` by default. Pass a plain object and it's treated as props, or use the full `{ props, slots, global, attrs }` shape when you need more control. Default options deep-merge with per-test overrides, so you set shared props once and only override what changes.
+- `createDeepMount` — the same idea, but uses full `mount` so child components render in full.
+- `cleanupMountedWrappers` — unmounts every wrapper created during the test run. Call it in `afterEach` to prevent things like `@vueuse/core` listeners from accumulating between tests.
+- `withAppContext` — runs a composable inside a real Vue app with Pinia and Pinia Colada installed. Useful when you're testing a composable that calls `useQuery` or `useStore` outside of a component.
+
+### `@lewishowles/testing/vitest`
+
+A few helpers that come up in many test suites:
+
+- `mockLocalStorage` — replaces `window.localStorage` with a Vitest mock and returns it so you can assert against it.
+- `setupPinia` — registers a `beforeEach` hook that creates a fresh Pinia instance before every test, so store state can't leak between them.
+- `mockConsole` — spies on console methods and suppresses their output. The spies are returned so you can assert on them, and they're restored automatically when `vi.restoreAllMocks()` runs.
+
+### `@lewishowles/testing/playwright`
+
+Config presets and a mount helper for Playwright component tests:
+
+- `chromiumProject` — a Desktop Chrome project definition ready to drop into `defineConfig`'s `projects` array.
+- `sharedUse` — shared `use` options that set `testIdAttribute` to `data-test`, so `getByTestId` works with your existing `data-test` attributes.
+- `loadTestEnv(configDir)` — loads your project's `.env` file for Playwright workers. Pass `dirname(fileURLToPath(import.meta.url))` so the path resolves relative to your project, not this package. Does nothing silently in CI, where environment variables come from the environment directly.
+- `snapshotDir(configDir)` — returns the absolute path to a `snapshots/` directory, resolved from your config file's location.
+- `createMount` — the Playwright CT counterpart to the Vue `createMount`. Same prop shorthand and deep-merge behaviour; takes Playwright's `mount` fixture as its first argument.
+- `slotSvg` — a minimal SVG string for slot tests. Playwright CT's slot API only accepts strings, so this gives you a valid placeholder wherever an icon or image slot is required.
+
 ## 0.10.0 - 2025-10-27
 
 ### Cypress

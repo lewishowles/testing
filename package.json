@@ -9,7 +9,9 @@
 	"files": [
 		"src/playwright",
 		"src/vitest",
-		"src/vue"
+		"src/vue",
+		"docs",
+		"CHANGELOG.md"
 	],
 	"type": "module",
 	"exports": {

@@ -76,9 +76,9 @@ export function createDeepMount(component, defaultOptions = {}) {
 /**
  * Unmounts all tracked wrappers and clears the tracking list.
  *
- * Call this in `afterEach` to prevent `@vueuse/core` event listeners from
- * accumulating across tests. It is exported for manual use when the automatic
- * `afterEach` call is not available.
+ * Call this in `afterEach` to prevent things like `@vueuse/core` event
+ * listeners from accumulating across tests. It is exported for manual use when
+ * the automatic `afterEach` call is not available.
  */
 export function cleanupMountedWrappers() {
 	mountedWrappers.forEach((wrapper) => {
