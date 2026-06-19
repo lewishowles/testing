@@ -1,18 +1,22 @@
 # `@lewishowles/testing`
 
-Shared testing conventions and utilities for Lewis Howles projects, covering Vitest, Vue/component tests, and Playwright.
+Shared testing utilities, covering Vitest helpers, Vue component mounting, and Playwright config presets.
 
-## Status
+## Requirements
 
-Version 1.0.0 — Cypress surface removed. Vitest, Vue, and Playwright helpers are in progress.
+- Node 22+ / Bun
+- Peer dependencies vary by subpath — see each doc
 
-## Planned exports
+## Installation
 
-| Subpath                           | Purpose                                                                                          |
-| --------------------------------- | ------------------------------------------------------------------------------------------------ |
-| `@lewishowles/testing/vitest`     | Browser API mocks, Pinia setup, mount cleanup, API mock factories, console suppression           |
-| `@lewishowles/testing/vue`        | `createMount` (unit), `cleanupMountedWrappers`, `withAppContext`, slot helpers                   |
-| `@lewishowles/testing/playwright` | Shared config presets, `createMount` (CT), route interceptors, accessibility interaction helpers |
-| `@lewishowles/testing/recipes`    | Agent-facing recipes — what/how/what not to test, per component type                             |
+```bash
+bun add -d @lewishowles/testing
+```
 
-No exports ship yet. Subpaths will be added as each phase lands.
+## Subpaths
+
+| Subpath                           | Purpose                                             | Docs                                     |
+| --------------------------------- | --------------------------------------------------- | ---------------------------------------- |
+| `@lewishowles/testing/vue`        | Component mounting and app context for Vitest       | [docs/vue.md](docs/vue.md)               |
+| `@lewishowles/testing/vitest`     | Browser API mocks, Pinia setup, console suppression | [docs/vitest.md](docs/vitest.md)         |
+| `@lewishowles/testing/playwright` | Config presets and component test mount helper      | [docs/playwright.md](docs/playwright.md) |
