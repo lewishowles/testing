@@ -1,21 +1,21 @@
-name: Publish Package
+name: CI
 
 on:
   push:
-    tags:
-      - "v*"
+    branches:
+      - main
+  pull_request:
 
 concurrency:
-  group: publish-${{ github.ref }}
-  cancel-in-progress: false
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  publish:
+  check:
     runs-on: ubuntu-latest
 
     permissions:
       contents: read
-      packages: write
 
     steps:
       - name: Checkout code
@@ -42,8 +42,3 @@ jobs:
 
       - name: Unit tests
         run: vp test
-
-      - name: Publish to GitHub Packages
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
