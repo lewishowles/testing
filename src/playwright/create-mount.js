@@ -1,4 +1,5 @@
 import { deepMerge } from "../shared/deep-merge.js";
+import { normaliseMountOptions } from "../shared/create-mount-options.js";
 
 /**
  * Returns a function that mounts the given component in a Playwright component
@@ -30,12 +31,7 @@ export function createMount(component, defaultOptions = {}) {
 	 *     Options for this individual mount call.
 	 */
 	return function mountComponent(mount, options = {}) {
-		const isDirectProps =
-			!Object.hasOwn(options, "props") &&
-			!Object.hasOwn(options, "slots") &&
-			!Object.hasOwn(options, "global");
-
-		const providedOptions = isDirectProps ? { props: options } : options;
+		const providedOptions = normaliseMountOptions(options, ["props", "slots", "global"]);
 
 		return mount(component, deepMerge(defaultOptions, providedOptions));
 	};

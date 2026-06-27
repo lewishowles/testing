@@ -7,6 +7,7 @@
 - Removed `@lewishowles/helpers` runtime dependency. `deepMerge` is now a local utility in `src/shared/deep-merge.js`, keeping the package zero-dependency.
 - Migrated publishing from GitHub Packages to NPM with tokenless trusted publishing (provenance).
 - Removed `.npmrc` and GitHub Packages auth from CI workflows.
+- Extracted shared direct-props detection into `src/shared/create-mount-options.js`, removing duplication between Vue and Playwright `createMount` implementations.
 
 ## 1.0.0 — 2026-06-19
 
