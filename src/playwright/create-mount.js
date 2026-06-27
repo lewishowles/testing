@@ -1,4 +1,4 @@
-import { deepMerge } from "@lewishowles/helpers/object";
+import { deepMerge } from "../shared/deep-merge.js";
 
 /**
  * Returns a function that mounts the given component in a Playwright component

@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- Removed `@lewishowles/helpers` runtime dependency. `deepMerge` is now a local utility in `src/shared/deep-merge.js`, keeping the package zero-dependency.
+- Migrated publishing from GitHub Packages to NPM with tokenless trusted publishing (provenance).
+- Removed `.npmrc` and GitHub Packages auth from CI workflows.
+
 ## 1.0.0 — 2026-06-19
 
 Given the recent migration from Cypress to Playwright, this version re-architects everything from the ground up, providing useful features for Vitest, Vue, and Playwright.

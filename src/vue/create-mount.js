@@ -1,5 +1,5 @@
 import { mount, shallowMount, RouterLinkStub } from "@vue/test-utils";
-import { deepMerge } from "@lewishowles/helpers/object";
+import { deepMerge } from "../shared/deep-merge.js";
 
 // All wrappers mounted during a test run, used to clean up after each test.
 const mountedWrappers = [];

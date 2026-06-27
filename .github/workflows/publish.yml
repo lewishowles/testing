@@ -14,8 +14,8 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
+      id-token: write
       contents: read
-      packages: write
 
     steps:
       - name: Checkout code
@@ -27,13 +27,6 @@ jobs:
           node-version: "24"
           cache: true
 
-      - name: Write .npmrc for GitHub Packages auth
-        run: |
-          echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" >> .npmrc
-          echo "@lewishowles:registry=https://npm.pkg.github.com" >> .npmrc
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
-
       - name: Install dependencies
         run: vp install --frozen-lockfile
 
@@ -43,7 +36,5 @@ jobs:
       - name: Unit tests
         run: vp test
 
-      - name: Publish to GitHub Packages
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
+      - name: Publish to NPM
+        run: npm publish --provenance
