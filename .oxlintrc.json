@@ -49,6 +49,12 @@
 			"env": {
 				"node": true
 			}
+		},
+		{
+			"files": ["**/*.d.ts"],
+			"rules": {
+				"vite-plus/prefer-vite-plus-imports": "off"
+			}
 		}
 	],
 	"options": {

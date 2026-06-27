@@ -1,6 +1,11 @@
 # Changelog
 
-## Unreleased
+## 1.1.0 — 2026-06-27
+
+### Added
+
+- Type declarations (`.d.ts`) for all three subpath exports (`./vitest`, `./vue`, `./playwright`), referencing peer dependency types (`vitest`, `@vue/test-utils`, `@playwright/test`, `vue`).
+- `types` conditions in `package.json` `exports` field so TypeScript consumers resolve types automatically.
 
 ### Changed
 
