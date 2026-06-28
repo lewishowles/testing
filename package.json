@@ -1,6 +1,6 @@
 {
 	"name": "@lewishowles/testing",
-	"version": "1.1.0",
+	"version": "1.1.1",
 	"description": "Shared testing conventions and utilities for Lewis Howles projects, covering Vitest, Vue/component tests, and Playwright.",
 	"repository": {
 		"type": "git",

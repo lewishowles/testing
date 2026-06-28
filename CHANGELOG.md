@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.1 — 2026-06-28
+
+### Fixed
+
+- `deepMerge` no longer flattens class instances (e.g. `Date`, custom classes) and Vue refs passed through `createMount` options. Previously, objects with `constructor === Object` were recursed into, which silently broke refs in `global.provide` and other non-plain-object values.
+
 ## 1.1.0 — 2026-06-27
 
 ### Added
