@@ -1,6 +1,5 @@
 import { mount, shallowMount, RouterLinkStub } from "@vue/test-utils";
-import { deepMerge } from "../shared/deep-merge.js";
-import { normaliseMountOptions } from "../shared/create-mount-options.js";
+import { mergeMountOptions, normaliseMountOptions } from "../shared/create-mount-options.js";
 
 // All wrappers mounted during a test run, used to clean up after each test.
 const mountedWrappers = [];
@@ -46,7 +45,7 @@ export function createMount(component, defaultOptions = {}, mountFunction = shal
 
 		const wrapper = mountFunction(
 			component,
-			deepMerge(defaultOptions, globalOptions, providedOptions),
+			mergeMountOptions(defaultOptions, globalOptions, providedOptions),
 		);
 
 		mountedWrappers.push(wrapper);

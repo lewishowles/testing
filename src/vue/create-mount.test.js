@@ -82,6 +82,45 @@ describe("createMount", () => {
 
 			expect(wrapper.props("label")).toBe("default");
 		});
+
+		test("preserves stub identity so findComponent matches by reference", () => {
+			const MyStub = defineComponent({
+				render() {
+					return h("div", { class: "my-stub" }, "stubbed");
+				},
+			});
+
+			const mount = createMount(ParentComponent, {
+				global: { stubs: { ChildComponent: MyStub } },
+			});
+
+			const wrapper = mount();
+
+			expect(wrapper.findComponent(MyStub).exists()).toBe(true);
+		});
+
+		test("preserves component identity in global.components so findComponent matches by reference", () => {
+			const MyComp = defineComponent({
+				render() {
+					return h("div", { class: "my-comp" });
+				},
+			});
+
+			// Use a component that renders MyComp by name so global.components resolves it.
+			const Parent = defineComponent({
+				render() {
+					return h("div", [h(MyComp)]);
+				},
+			});
+
+			const mount = createDeepMount(Parent, {
+				global: { components: { MyComp } },
+			});
+
+			const wrapper = mount();
+
+			expect(wrapper.findComponent(MyComp).exists()).toBe(true);
+		});
 	});
 
 	describe("shallow mounting", () => {

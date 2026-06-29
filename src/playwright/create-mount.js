@@ -1,5 +1,4 @@
-import { deepMerge } from "../shared/deep-merge.js";
-import { normaliseMountOptions } from "../shared/create-mount-options.js";
+import { mergeMountOptions, normaliseMountOptions } from "../shared/create-mount-options.js";
 
 /**
  * Returns a function that mounts the given component in a Playwright component
@@ -33,7 +32,7 @@ export function createMount(component, defaultOptions = {}) {
 	return function mountComponent(mount, options = {}) {
 		const providedOptions = normaliseMountOptions(options, ["props", "slots", "global"]);
 
-		return mount(component, deepMerge(defaultOptions, providedOptions));
+		return mount(component, mergeMountOptions(defaultOptions, providedOptions));
 	};
 }
 
