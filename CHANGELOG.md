@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.2 — 2026-06-29
+
+### Fixed
+
+- `createMount` (both Vue and Playwright) now preserves component definition references in `global.stubs` and `global.components` when merging options. Previously `deepMerge` recursed into those objects, creating copies that broke `findComponent(stubDef)` by object identity.
+
 ## 1.1.1 — 2026-06-28
 
 ### Fixed
