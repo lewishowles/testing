@@ -9,6 +9,71 @@ Vitest helpers for browser API mocking, Pinia setup, and console suppression.
 
 ## Exports
 
+## Recipes
+
+### Mock API composables
+
+Keep API module mocks in your project, close to the module shape they replace. `@lewishowles/testing` provides the general Vitest helpers; the local test helper should own the literal `vi.mock(...)` call and the adapter for your composable, SDK, class, or named exports.
+
+Use `vi.hoisted` for mock handlers referenced by `vi.mock(...)`, then export the handlers so tests can set responses and assert calls.
+
+```js
+import { beforeEach, vi } from "vite-plus/test";
+
+const mockGet = vi.hoisted(() => vi.fn());
+const mockPost = vi.hoisted(() => vi.fn());
+const mockIsLoading = vi.hoisted(() => ({ value: false }));
+const mockIsReady = vi.hoisted(() => ({ value: false }));
+
+vi.mock("@/composables/api/use-api", () => ({
+	default: () => ({
+		get: mockGet,
+		isLoading: mockIsLoading,
+		isReady: mockIsReady,
+		post: mockPost,
+	}),
+}));
+
+beforeEach(() => {
+	vi.clearAllMocks();
+});
+
+export default {
+	get: mockGet,
+	isLoading: mockIsLoading,
+	isReady: mockIsReady,
+	post: mockPost,
+};
+```
+
+Tests can import the local helper and use normal Vitest mock APIs.
+
+```js
+import mockApi from "@test/unit/support/mock-api";
+
+test("loads items", async () => {
+	mockApi.get.mockResolvedValue({ items: [] });
+
+	await loadItems();
+
+	expect(mockApi.get).toHaveBeenCalledWith("items");
+});
+```
+
+For SDK clients, keep the SDK-specific shape in the local helper too.
+
+```js
+const mockGet = vi.hoisted(() => vi.fn());
+
+vi.mock("@vendor/sdk", () => ({
+	Client: class {
+		get = mockGet;
+	},
+}));
+```
+
+Do not hide `vi.mock(...)` inside an imported package helper. Vitest needs to see literal mock calls in the test module or its local helper so they can be hoisted before imports.
+
 ### `mockLocalStorage()`
 
 Replaces `window.localStorage` with a Vitest mock and returns the mock object for assertions.

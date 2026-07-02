@@ -6,6 +6,69 @@ Playwright config presets and a component test mount helper.
 
 - `@playwright/test`
 
+## Recipes
+
+### Shared config recipe
+
+Use one `configDir` value when loading `.env` and setting the snapshot directory. This keeps both paths relative to your Playwright config file, not this package.
+
+```js
+import { dirname } from "node:path";
+import { fileURLToPath } from "node:url";
+import { defineConfig } from "@playwright/test";
+import {
+	chromiumProject,
+	loadTestEnv,
+	sharedUse,
+	snapshotDir,
+} from "@lewishowles/testing/playwright";
+
+const configDir = dirname(fileURLToPath(import.meta.url));
+
+loadTestEnv(configDir);
+
+export default defineConfig({
+	projects: [chromiumProject],
+	snapshotDir: snapshotDir(configDir),
+	use: {
+		...sharedUse,
+		baseURL: process.env.VITE_APP_URL,
+	},
+});
+```
+
+If a project already has local copies of these helpers, replace the local implementations with imports from this package and keep any project-specific values in the config file.
+
+Before:
+
+```js
+const configDir = dirname(fileURLToPath(import.meta.url));
+
+loadTestEnv(configDir);
+
+export default defineConfig({
+	snapshotDir: join(configDir, "snapshots"),
+	use: {
+		testIdAttribute: "data-test",
+	},
+});
+```
+
+After:
+
+```js
+const configDir = dirname(fileURLToPath(import.meta.url));
+
+loadTestEnv(configDir);
+
+export default defineConfig({
+	snapshotDir: snapshotDir(configDir),
+	use: {
+		...sharedUse,
+	},
+});
+```
+
 ## Exports
 
 ### `chromiumProject`

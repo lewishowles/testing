@@ -20,3 +20,8 @@ bun add -d @lewishowles/testing
 | `@lewishowles/testing/vue`        | Component mounting and app context for Vitest       | [docs/vue.md](docs/vue.md)               |
 | `@lewishowles/testing/vitest`     | Browser API mocks, Pinia setup, console suppression | [docs/vitest.md](docs/vitest.md)         |
 | `@lewishowles/testing/playwright` | Config presets and component test mount helper      | [docs/playwright.md](docs/playwright.md) |
+
+## Recipes
+
+- [Mock API composables in Vitest](docs/vitest.md#mock-api-composables)
+- [Share Playwright `.env` and snapshot config](docs/playwright.md#shared-config-recipe)
