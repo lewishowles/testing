@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 1.2.0 — 2026-07-02
+
 ### Added
 
 - `setupVueMounting` in `@lewishowles/testing/vue` — registers Vue wrapper cleanup after each test for suites using `createMount` or `createDeepMount`.
