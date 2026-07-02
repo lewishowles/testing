@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- `setupVueMounting` in `@lewishowles/testing/vue` — registers Vue wrapper cleanup after each test for suites using `createMount` or `createDeepMount`.
+- `setupConsole` in `@lewishowles/testing/vitest` — registers console suppression hooks once and exposes stable spies for assertions.
+
 ## 1.1.2 — 2026-06-29
 
 ### Fixed
