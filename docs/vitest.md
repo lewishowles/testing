@@ -47,11 +47,31 @@ it("starts with empty items", () => {
 });
 ```
 
+### `setupConsole(methods?)`
+
+Registers hooks that suppress selected console methods during each test and restore them afterwards.
+
+The returned object stays stable, so it can be declared once and used for assertions in every test. Spy instances are refreshed before each test.
+
+Defaults to `["error"]`.
+
+```js
+import { setupConsole } from "@lewishowles/testing/vitest";
+
+const console = setupConsole(["warn", "error"]);
+
+it("warns on invalid input", () => {
+	processInput(null);
+
+	expect(console.warn).toHaveBeenCalled();
+});
+```
+
 ### `mockConsole(methods?)`
 
 Spies on the given console methods and suppresses their output, returning the spies for assertions.
 
-Uses `vi.spyOn`, so the original implementation is restored automatically when `vi.restoreAllMocks()` runs (e.g. via `restoreMocks: true` in your Vitest config). Call inside `beforeEach` to get a fresh spy per test.
+Uses `vi.spyOn`, so the original implementation is restored automatically when `vi.restoreAllMocks()` runs (e.g. via `restoreMocks: true` in your Vitest config). Call inside `beforeEach` to get a fresh spy per test, or use `setupConsole()` when you want the hook registration handled for you.
 
 Defaults to `["error"]`.
 
