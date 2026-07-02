@@ -6,6 +6,7 @@
 
 - `setupVueMounting` in `@lewishowles/testing/vue` — registers Vue wrapper cleanup after each test for suites using `createMount` or `createDeepMount`.
 - `setupConsole` in `@lewishowles/testing/vitest` — registers console suppression hooks once and exposes stable spies for assertions.
+- `withAppContext` now accepts optional `plugins` and `provides` for composables that need extra Vue app context.
 
 ## 1.1.2 — 2026-06-29
 

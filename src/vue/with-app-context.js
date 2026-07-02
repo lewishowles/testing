@@ -11,13 +11,28 @@ import { createPinia } from "pinia";
  *
  * @param  {Function}  callback
  *     A function containing the composable call to run.
+ * @param  {object}  options
+ *     Extra app context to install before running the callback.
  */
-export function withAppContext(callback) {
+export function withAppContext(callback, options = {}) {
 	const app = createApp({});
 	const pinia = createPinia();
+	const { plugins = [], provides = {} } = options;
 
 	app.use(pinia);
 	app.use(PiniaColada);
+
+	for (const plugin of plugins) {
+		if (Array.isArray(plugin)) {
+			app.use(...plugin);
+		} else {
+			app.use(plugin);
+		}
+	}
+
+	for (const key of Reflect.ownKeys(provides)) {
+		app.provide(key, provides[key]);
+	}
 
 	return app.runWithContext(callback);
 }

@@ -73,11 +73,13 @@ Call in `afterEach` to prevent things like `@vueuse/core` event listeners from a
 afterEach(cleanupMountedWrappers);
 ```
 
-### `withAppContext(callback)`
+### `withAppContext(callback, options?)`
 
 Runs a composable inside a real Vue app with Pinia and Pinia Colada installed, matching the context those composables expect at runtime.
 
 Use this when testing a composable that calls `useQuery`, `useMutation`, or `useStore` outside of a mounted component.
+
+Pass `plugins` or `provides` when the composable needs extra app context.
 
 ```js
 import { useMyStore } from "./my-store.js";
@@ -87,5 +89,15 @@ it("initialises with default state", () => {
 	const store = withAppContext(() => useMyStore());
 
 	expect(store.items).toEqual([]);
+});
+
+it("reads injected config", () => {
+	const config = withAppContext(() => inject("config"), {
+		provides: {
+			config: { apiBase: "/api" },
+		},
+	});
+
+	expect(config.apiBase).toBe("/api");
 });
 ```
