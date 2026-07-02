@@ -10,6 +10,18 @@ Component mounting utilities for Vitest + `@vue/test-utils`.
 
 ## Exports
 
+### `setupVueMounting()`
+
+Registers `afterEach(cleanupMountedWrappers)` for suites that use `createMount` or `createDeepMount`.
+
+Call once in a shared setup file, or at the top of a test suite.
+
+```js
+import { setupVueMounting } from "@lewishowles/testing/vue";
+
+setupVueMounting();
+```
+
 ### `createMount(component, defaultOptions?)`
 
 Returns a mount function for a single component. Every call deep-merges your per-test options on top of `defaultOptions`, so you set shared props once and override only what changes per test.
@@ -19,13 +31,13 @@ Uses `shallowMount` by default, which stubs child components. `RouterLink` is al
 Pass options as a flat object to treat them as props, or use the full `{ props, slots, global, attrs }` shape when you need more control.
 
 ```js
-import { createMount, cleanupMountedWrappers } from "@lewishowles/testing/vue";
+import { createMount, setupVueMounting } from "@lewishowles/testing/vue";
 
 import MyButton from "./my-button.vue";
 
 const mount = createMount(MyButton, { props: { label: "Save" } });
 
-afterEach(cleanupMountedWrappers);
+setupVueMounting();
 
 it("renders the label", () => {
 	// Flat object → treated as props
