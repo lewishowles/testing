@@ -39,7 +39,7 @@
 		"test:unit": "vp test run"
 	},
 	"devDependencies": {
-		"@lewishowles/lint-config": "file:../lint-config",
+		"@lewishowles/lint-config": "^0.1.3",
 		"@pinia/colada": "^1.3.1",
 		"@playwright/test": "^1.61.1",
 		"@stylistic/eslint-plugin": "^5.10.0",
