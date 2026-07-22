@@ -1,0 +1,15 @@
+{
+	"sizeBudgets": {
+		"perFile": {
+			"globs": ["src/**/*.js"],
+			"maxBytes": 10240
+		},
+		"total": [
+			{
+				"name": "published source total",
+				"globs": ["src/**"],
+				"maxBytes": 98304
+			}
+		]
+	}
+}
