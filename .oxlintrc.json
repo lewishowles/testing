@@ -1,6 +1,6 @@
 {
 	"extends": ["./node_modules/@lewishowles/lint-config/base.json"],
-	"ignorePatterns": [".codebase-memory/**"],
+	"ignorePatterns": ["**/.*"],
 	"overrides": [
 		{
 			"files": ["src/playwright/**/*.js"],

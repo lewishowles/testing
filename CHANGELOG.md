@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 1.2.1 — 2026-08-03
+
+### Fixed
+
+- `chromiumProject` no longer imports Playwright's device registry just to define Chromium, preventing conflicts when consumers resolve multiple Playwright versions.
+
 ## 1.2.0 — 2026-07-02
 
 ### Added

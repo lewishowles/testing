@@ -1,5 +1,5 @@
 {
-	"ignorePatterns": [".codebase-memory/**", "node_modules/**"],
+	"ignorePatterns": ["**/.*"],
 	"printWidth": 100,
 	"semi": true,
 	"singleQuote": false,
