@@ -1,5 +1,3 @@
-import { devices } from "@playwright/test";
-
 /**
  * A Playwright project definition targeting Desktop Chrome.
  *
@@ -10,5 +8,5 @@ import { devices } from "@playwright/test";
  */
 export const chromiumProject = {
 	name: "chromium",
-	use: { ...devices["Desktop Chrome"] },
+	use: { browserName: "chromium" },
 };
