@@ -21,6 +21,7 @@ export function installDataTestPlugin() {
 
 	config.plugins.VueWrapper.install(dataTestPlugin);
 	config.plugins.DOMWrapper.install(dataTestPlugin);
+
 	installed = true;
 }
 
@@ -43,6 +44,7 @@ function dataTestPlugin(wrapper) {
 		getByData(name) {
 			// The match, or the empty result, tagged with the value it was looked up by.
 			const result = wrapper.find(`[data-test="${name}"]`);
+
 			dataTestValues.set(result, name);
 
 			return result;

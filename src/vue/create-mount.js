@@ -1,4 +1,4 @@
-import { mount, shallowMount, RouterLinkStub } from "@vue/test-utils";
+import { RouterLinkStub, mount, shallowMount } from "@vue/test-utils";
 import { mergeMountOptions, normaliseMountOptions } from "../shared/create-mount-options.js";
 
 // All wrappers mounted during a test run, used to clean up after each test.

@@ -49,7 +49,6 @@ export function mergeMountOptions(...sources) {
 	// Keys under `global` whose values are objects of component definitions
 	// and must be shallow-merged to preserve object identity.
 	const identityKeys = ["stubs", "components"];
-
 	// Collect identity-sensitive objects from each source.
 	const collected = {};
 
@@ -68,12 +67,12 @@ export function mergeMountOptions(...sources) {
 	}
 
 	const merged = deepMerge(...sources);
-
 	// Only touch merged.global when there are identity-key objects to restore.
 	const hasIdentitySources = identityKeys.some((key) => collected[key].length > 0);
 
 	if (hasIdentitySources) {
 		merged.global = merged.global || {};
+
 		for (const key of identityKeys) {
 			if (collected[key].length > 0) {
 				merged.global[key] = Object.assign({}, ...collected[key]);

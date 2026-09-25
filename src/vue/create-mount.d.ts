@@ -1,5 +1,5 @@
 import type { Component } from "vue";
-import type { VueWrapper, MountingOptions } from "@vue/test-utils";
+import type { MountingOptions, VueWrapper } from "@vue/test-utils";
 
 /** Mounting options accepted by createMount and its returned mount function. */
 export type MountOptions = MountingOptions<Record<string, unknown>> & Record<string, unknown>;

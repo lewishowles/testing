@@ -1,5 +1,6 @@
 {
 	"extends": ["./node_modules/@lewishowles/lint-config/base.json"],
+	"env": { "builtin": true, "browser": true },
 	"ignorePatterns": ["**/.*"],
 	"overrides": [
 		{
