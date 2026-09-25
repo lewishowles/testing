@@ -13,11 +13,11 @@ export interface MockLocalStorage {
 }
 
 /**
- * Replaces `window.localStorage` with a Vitest mock, returning the mock
- * object for use in assertions.
+ * Replaces `window.localStorage` with a Vitest mock, returning the mock object
+ * for use in assertions.
  *
  * Call once at the top of a setup file or test suite.
  *
- * @returns The mock localStorage object.
+ * @returns  The mock localStorage object.
  */
 export declare function mockLocalStorage(): MockLocalStorage;

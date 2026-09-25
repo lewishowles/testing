@@ -77,7 +77,14 @@ describe("deepMerge", () => {
 	});
 
 	test("preserves a class instance rather than flattening it", () => {
+		/* A class whose instances `deepMerge` should keep as they are. */
 		class Token {
+			/**
+			 * Stores a label on the instance, as a real class would.
+			 *
+			 * @param  {string}  value
+			 *     A label that identifies this instance.
+			 */
 			constructor(value) {
 				this.value = value;
 			}
@@ -91,7 +98,14 @@ describe("deepMerge", () => {
 	});
 
 	test("replaces rather than merges when source is a class instance and target has a plain object at the same key", () => {
+		/* A class whose instance replaces the plain object at the same key. */
 		class Token {
+			/**
+			 * Stores a label on the instance, as a real class would.
+			 *
+			 * @param  {string}  value
+			 *     A label that identifies this instance.
+			 */
 			constructor(value) {
 				this.value = value;
 			}

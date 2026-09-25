@@ -10,8 +10,12 @@ import { mockConsole } from "./mock-console.js";
  *
  * @param  {string[]}  methods
  *     The console methods to suppress. Defaults to `["error"]`.
+ *
+ * @returns  {Record<string, import("vitest").MockInstance>}
+ *     A stable record of the current spies for the selected methods.
  */
 export function setupConsole(methods = ["error"]) {
+	// Keep the same record while the hooks replace its spies for each test.
 	const spies = {};
 
 	beforeEach(() => {

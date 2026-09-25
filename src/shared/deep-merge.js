@@ -1,22 +1,14 @@
 /**
- * Deep-merges multiple plain objects, with later sources overriding earlier
- * ones. Nested plain objects are merged recursively; arrays and other values
- * replace entirely.
+ * Checks whether `deepMerge` should merge into a value rather than replace it.
+ * Vue refs also have `constructor === Object`, so they are recognised by Vue's
+ * `__v_isRef` marker instead, which avoids importing Vue.
  *
- * Used by `createMount` in both `/vue` and `/playwright` to merge default
- * options with per-call overrides without pulling in a runtime dependency.
+ * @param  {unknown}  value
+ *     The value to check.
  *
- * @param  {...object} sources
- *     Objects to merge, left-to-right.
- * @returns {object}
- *     A new merged object.
- * @example
- * deepMerge({ props: { label: "default" } }, { props: { label: "override" } });
- * // → { props: { label: "override" } }
+ * @returns  {boolean}
+ *     True for a plain object that is not a Vue ref.
  */
-
-// Vue refs have constructor === Object, so we duck-type on __v_isRef (Vue 3's
-// stable internal marker) to exclude them from recursion without importing Vue.
 function isPlainObject(value) {
 	return (
 		value !== null &&
@@ -27,7 +19,24 @@ function isPlainObject(value) {
 	);
 }
 
+/**
+ * Deep-merges multiple plain objects, with later sources overriding earlier
+ * ones. Nested plain objects are merged recursively; arrays and other values
+ * replace entirely.
+ *
+ * Used by `createMount` in both `/vue` and `/playwright` to merge default
+ * options with per-call overrides without pulling in a runtime dependency.
+ *
+ * @param  {...object}  sources
+ *     Objects to merge, left-to-right.
+ * @returns  {object}
+ *     A new merged object.
+ * @example
+ * deepMerge({ props: { label: "default" } }, { props: { label: "override" } });
+ * // → { props: { label: "override" } }
+ */
 export function deepMerge(...sources) {
+	// Build a new result so no source object is modified.
 	const result = {};
 
 	for (const source of sources) {
