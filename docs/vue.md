@@ -12,7 +12,7 @@ Component mounting utilities for Vitest + `@vue/test-utils`.
 
 ### `setupVueMounting()`
 
-Adds `getByData(name)` and `getAllByData(name)` to Vue Test Utils component and element wrappers, and registers `afterEach(cleanupMountedWrappers)` for suites that use `createMount` or `createDeepMount`.
+Adds `getByData(name)` and `getAllByData(name)` to Vue Test Utils component and element wrappers, registers `toExist()` and `toHaveAttribute(name, value?)` with Vitest, and registers `afterEach(cleanupMountedWrappers)` for suites that use `createMount` or `createDeepMount`.
 
 Call once in a shared setup file, or at the top of a test suite.
 
@@ -32,6 +32,17 @@ const errors = form.getAllByData("profile.error");
 expect(email.exists()).toBe(true);
 expect(errors).toHaveLength(2);
 ```
+
+Use `toExist()` to check whether a lookup found an element. Use `toHaveAttribute(name)` to check that an existing element has an attribute, or pass a value to check for an exact match. Both matchers support `.not`. An attribute check on a missing element fails even with `.not`; check for absence with `toExist()` instead.
+
+```js
+expect(email).toExist();
+expect(email).toHaveAttribute("type", "email");
+expect(email).not.toHaveAttribute("disabled");
+expect(form.getByData("profile.missing")).not.toExist();
+```
+
+Failures name the `data-test` value when the wrapper came from `getByData`. Other wrappers get a generic element message.
 
 ### `createMount(component, defaultOptions?)`
 

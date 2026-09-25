@@ -1,5 +1,13 @@
 import { config } from "@vue/test-utils";
 
+/**
+ * Remembers the data-test value each `getByData` result was found by, so
+ * matcher failures can name it. The value is kept here rather than on the
+ * result because Vue Test Utils' empty result throws when an unknown property
+ * is read.
+ */
+export const dataTestValues = new WeakMap();
+
 /** Prevents repeated setup calls from installing duplicate wrapper methods. */
 let installed = false;
 
@@ -33,7 +41,11 @@ function dataTestPlugin(wrapper) {
 		 * @returns {import("@vue/test-utils").DOMWrapper} The first match, or Vue Test Utils' empty wrapper, whose `exists()` returns false, when nothing matches.
 		 */
 		getByData(name) {
-			return wrapper.find(`[data-test="${name}"]`);
+			// The match, or the empty result, tagged with the value it was looked up by.
+			const result = wrapper.find(`[data-test="${name}"]`);
+			dataTestValues.set(result, name);
+
+			return result;
 		},
 		/**
 		 * Finds every descendant with the given data-test value.

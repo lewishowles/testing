@@ -1,7 +1,9 @@
 import "./data-test-plugin.js";
+import "./wrapper-matchers.js";
 
 /**
- * Adds data-test lookups to Vue Test Utils wrappers and registers an
+ * Adds data-test lookups to Vue Test Utils wrappers, registers the
+ * `toExist()` and `toHaveAttribute()` matchers, and registers an
  * `afterEach` hook that unmounts wrappers created by `createMount` and
  * `createDeepMount`.
  *

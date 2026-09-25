@@ -1,9 +1,11 @@
-import { afterEach } from "vite-plus/test";
+import { afterEach, expect } from "vite-plus/test";
 import { cleanupMountedWrappers } from "./create-mount.js";
 import { installDataTestPlugin } from "./data-test-plugin.js";
+import { wrapperMatchers } from "./wrapper-matchers.js";
 
 /**
- * Adds data-test lookups to Vue Test Utils wrappers and registers an
+ * Adds data-test lookups to Vue Test Utils wrappers, registers the
+ * `toExist()` and `toHaveAttribute()` matchers, and registers an
  * `afterEach` hook that unmounts wrappers created by `createMount` and
  * `createDeepMount`.
  *
@@ -11,6 +13,7 @@ import { installDataTestPlugin } from "./data-test-plugin.js";
  */
 export function setupVueMounting() {
 	installDataTestPlugin();
+	expect.extend(wrapperMatchers);
 
 	afterEach(() => {
 		cleanupMountedWrappers();
