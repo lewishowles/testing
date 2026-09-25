@@ -12,7 +12,7 @@ Component mounting utilities for Vitest + `@vue/test-utils`.
 
 ### `setupVueMounting()`
 
-Registers `afterEach(cleanupMountedWrappers)` for suites that use `createMount` or `createDeepMount`.
+Adds `getByData(name)` and `getAllByData(name)` to Vue Test Utils component and element wrappers, and registers `afterEach(cleanupMountedWrappers)` for suites that use `createMount` or `createDeepMount`.
 
 Call once in a shared setup file, or at the top of a test suite.
 
@@ -20,6 +20,17 @@ Call once in a shared setup file, or at the top of a test suite.
 import { setupVueMounting } from "@lewishowles/testing/vue";
 
 setupVueMounting();
+```
+
+Use the methods to find descendants by their `data-test` value. `getByData` returns a wrapper whose `exists()` returns `false` when nothing matches. `getAllByData` returns an empty array when nothing matches. Both methods also work on an element returned by a lookup.
+
+```js
+const form = wrapper.getByData("profile.form");
+const email = form.getByData("profile.email");
+const errors = form.getAllByData("profile.error");
+
+expect(email.exists()).toBe(true);
+expect(errors).toHaveLength(2);
 ```
 
 ### `createMount(component, defaultOptions?)`
