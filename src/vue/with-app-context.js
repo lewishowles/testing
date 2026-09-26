@@ -13,10 +13,16 @@ import { createPinia } from "pinia";
  *     A function containing the composable call to run.
  * @param  {object}  options
  *     Extra app context to install before running the callback.
+ *
+ * @returns  {*}
+ *     The value returned by the callback.
  */
 export function withAppContext(callback, options = {}) {
+	// A temporary app supplies Vue's injection context for the callback.
 	const app = createApp({});
+	// Each callback runs with its own Pinia instance.
 	const pinia = createPinia();
+	// The test can add its own plugins and provided values.
 	const { plugins = [], provides = {} } = options;
 
 	app.use(pinia);

@@ -1,10 +1,16 @@
 import type { Plugin } from "vue";
 
-/** Extra app context to install before running the callback. */
+/**
+ * These options add app context before the callback runs.
+ */
 export type AppContextOptions = {
-	/** Additional Vue plugins to install after Pinia and Pinia Colada. */
+	/**
+	 * These plugins are installed after Pinia and Pinia Colada.
+	 */
 	plugins?: (Plugin | [Plugin, ...unknown[]])[];
-	/** Values to provide on the app context before the callback runs. */
+	/**
+	 * These values are available through Vue's inject during the callback.
+	 */
 	provides?: Record<string | symbol, unknown>;
 };
 
@@ -17,6 +23,7 @@ export type AppContextOptions = {
  *
  * @param  callback A function containing the composable call to run.
  * @param  options  Extra app context to install before running the callback.
- * @returns Whatever the callback returns.
+ *
+ * @returns  The value returned by the callback.
  */
 export declare function withAppContext<T>(callback: () => T, options?: AppContextOptions): T;

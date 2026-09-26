@@ -1,16 +1,17 @@
 import type { Component } from "vue";
 import type { MountingOptions, VueWrapper } from "@vue/test-utils";
 
-/** Mounting options accepted by createMount and its returned mount function. */
+/**
+ * These options apply to createMount and its returned mount function.
+ */
 export type MountOptions = MountingOptions<Record<string, unknown>> & Record<string, unknown>;
 
 /**
- * Returns a function that mounts the given component with shared default
- * options, removing the need to specify a `props` key when only props are
- * provided.
+ * Creates a mount function with shared defaults. When a call passes only props,
+ * they can be given directly without a `props` key.
  *
- * Any default options passed here are deep-merged with per-call options on
- * each mount, so individual tests can override specific values.
+ * Any default options passed here are deep-merged with per-call options on each
+ * mount, so individual tests can override specific values.
  *
  * Mounted wrappers are tracked and can be cleaned up via
  * `cleanupMountedWrappers`, which prevents `@vueuse/core` listener pollution
@@ -18,8 +19,9 @@ export type MountOptions = MountingOptions<Record<string, unknown>> & Record<str
  *
  * @param  component      The Vue component to mount.
  * @param  defaultOptions Options applied to every mount call unless overridden.
- * @param  mountFunction  The `@vue/test-utils` mount function to use. Defaults to `shallowMount`.
- * @returns A mount function that accepts options (or a plain props object) and returns a `VueWrapper`.
+ * @param  mountFunction  Either `mount` or `shallowMount` (the default).
+ *
+ * @returns  A function accepting options or props and returning a `VueWrapper`.
  */
 export declare function createMount(
 	component: Component,
@@ -33,7 +35,8 @@ export declare function createMount(
  *
  * @param  component      The Vue component to mount.
  * @param  defaultOptions Options applied to every mount call unless overridden.
- * @returns A mount function that accepts options (or a plain props object) and returns a `VueWrapper`.
+ *
+ * @returns  A function accepting options or props and returning a `VueWrapper`.
  */
 export declare function createDeepMount(
 	component: Component,

@@ -14,12 +14,11 @@ const globalOptions = {
 };
 
 /**
- * Returns a function that mounts the given component with shared default
- * options, removing the need to specify a `props` key when only props are
- * provided.
+ * Creates a mount function with shared defaults. When a call passes only props,
+ * they can be given directly without a `props` key.
  *
- * Any default options passed here are deep-merged with per-call options on
- * each mount, so individual tests can override specific values.
+ * Any default options passed here are deep-merged with per-call options on each
+ * mount, so individual tests can override specific values.
  *
  * Mounted wrappers are tracked and can be cleaned up via
  * `cleanupMountedWrappers`, which prevents `@vueuse/core` listener pollution
@@ -31,6 +30,9 @@ const globalOptions = {
  *     Options applied to every mount call unless overridden.
  * @param  {Function}  mountFunction
  *     The `@vue/test-utils` mount function to use. Defaults to `shallowMount`.
+ *
+ * @returns  {Function}
+ *     A function that mounts the component with per-call options.
  */
 export function createMount(component, defaultOptions = {}, mountFunction = shallowMount) {
 	/**
@@ -39,10 +41,15 @@ export function createMount(component, defaultOptions = {}, mountFunction = shal
 	 *
 	 * @param  {object}  options
 	 *     Options for this individual mount call.
+	 *
+	 * @returns  {object}
+	 *     The mounted Vue wrapper.
 	 */
 	return function (options = {}) {
+		// This mount's options, with a props-only object moved under `props`.
 		const providedOptions = normaliseMountOptions(options, ["props", "slots", "global", "attrs"]);
 
+		// The wrapper tracked for cleanup after the test.
 		const wrapper = mountFunction(
 			component,
 			mergeMountOptions(defaultOptions, globalOptions, providedOptions),
@@ -62,6 +69,9 @@ export function createMount(component, defaultOptions = {}, mountFunction = shal
  *     The Vue component to mount.
  * @param  {object}  defaultOptions
  *     Options applied to every mount call unless overridden.
+ *
+ * @returns  {Function}
+ *     A function that fully mounts the component with per-call options.
  */
 export function createDeepMount(component, defaultOptions = {}) {
 	return createMount(component, defaultOptions, mount);
@@ -79,7 +89,8 @@ export function cleanupMountedWrappers() {
 		try {
 			wrapper.unmount();
 		} catch {
-			// Wrapper may already be unmounted; ignore.
+			// Keep unmounting the other wrappers if one fails to unmount.
+			return;
 		}
 	});
 

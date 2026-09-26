@@ -11,6 +11,12 @@ const TestComponent = defineComponent({
 			default: "",
 		},
 	},
+	/**
+	 * Renders the prop and link used to check mount options.
+	 *
+	 * @returns  {object}
+	 *     The test component's rendered node.
+	 */
 	render() {
 		return h("div", { class: "test-component" }, [
 			h("span", this.label),
@@ -22,14 +28,26 @@ const TestComponent = defineComponent({
 // A child component used to confirm that createDeepMount renders children
 // rather than stubbing them.
 const ChildComponent = defineComponent({
+	/**
+	 * Renders a child that only a deep mount shows in full.
+	 *
+	 * @returns  {object}
+	 *     The rendered child node.
+	 */
 	render() {
 		return h("span", { class: "child" }, "child");
 	},
 });
 
-// A parent that renders a ChildComponent, used to compare shallow vs deep mounting.
+// A parent that lets tests compare shallow and deep mounting of its child.
 const ParentComponent = defineComponent({
 	components: { ChildComponent },
+	/**
+	 * Renders the child used to compare mounting modes.
+	 *
+	 * @returns  {object}
+	 *     The rendered parent node.
+	 */
 	render() {
 		return h("div", h(ChildComponent));
 	},
@@ -85,6 +103,12 @@ describe("createMount", () => {
 
 		test("preserves stub identity so findComponent matches by reference", () => {
 			const MyStub = defineComponent({
+				/**
+				 * Renders the stub used to check component identity.
+				 *
+				 * @returns  {object}
+				 *     The rendered stub node.
+				 */
 				render() {
 					return h("div", { class: "my-stub" }, "stubbed");
 				},
@@ -101,13 +125,25 @@ describe("createMount", () => {
 
 		test("preserves component identity in global.components so findComponent matches by reference", () => {
 			const MyComp = defineComponent({
+				/**
+				 * Renders the registered component used in the identity check.
+				 *
+				 * @returns  {object}
+				 *     The rendered component node.
+				 */
 				render() {
 					return h("div", { class: "my-comp" });
 				},
 			});
 
-			// Use a component that renders MyComp by name so global.components resolves it.
+			// The parent renders MyComp so global.components can resolve it.
 			const Parent = defineComponent({
+				/**
+				 * Renders the registered child for the identity check.
+				 *
+				 * @returns  {object}
+				 *     The rendered parent node.
+				 */
 				render() {
 					return h("div", [h(MyComp)]);
 				},
