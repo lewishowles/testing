@@ -1,14 +1,12 @@
 import { config } from "@vue/test-utils";
 
-/**
- * Remembers the data-test value each `getByData` result was found by, so
- * matcher failures can name it. The value is kept here rather than on the
- * result because Vue Test Utils' empty result throws when an unknown property
- * is read.
- */
+// Remembers the data-test value each `getByData` result was found by, so
+// matcher failures can name it. It is kept in this map rather than on the
+// result, because Vue Test Utils' empty wrapper throws when code reads a
+// property it does not have.
 export const dataTestValues = new WeakMap();
 
-/** Prevents repeated setup calls from installing duplicate wrapper methods. */
+// Prevents repeated setup calls from installing duplicate wrapper methods.
 let installed = false;
 
 /**
@@ -26,11 +24,14 @@ export function installDataTestPlugin() {
 }
 
 /**
- * Builds the data-test lookups for one wrapper. They return exactly what `find` and `findAll` return for `[data-test="name"]`.
+ * Builds the data-test lookups for one wrapper. They return exactly what `find`
+ * and `findAll` return for `[data-test="name"]`.
  *
  * @param  {import("@vue/test-utils").VueWrapper | import("@vue/test-utils").DOMWrapper}  wrapper
  *     The wrapper receiving the lookup methods.
- * @returns {object} The methods added to the wrapper.
+ *
+ * @returns  {object}
+ *     The methods added to the wrapper.
  */
 function dataTestPlugin(wrapper) {
 	return {
@@ -39,10 +40,14 @@ function dataTestPlugin(wrapper) {
 		 *
 		 * @param  {string}  name
 		 *     The data-test value to find.
-		 * @returns {import("@vue/test-utils").DOMWrapper} The first match, or Vue Test Utils' empty wrapper, whose `exists()` returns false, when nothing matches.
+		 *
+		 * @returns  {import("@vue/test-utils").DOMWrapper}
+		 *     The first match. When nothing matches, Vue Test Utils' empty
+		 *     wrapper, whose `exists()` returns false.
 		 */
 		getByData(name) {
-			// The match, or the empty result, tagged with the value it was looked up by.
+			// The first match or the empty wrapper. The next line records which
+			// data-test value it was found by.
 			const result = wrapper.find(`[data-test="${name}"]`);
 
 			dataTestValues.set(result, name);
@@ -54,7 +59,9 @@ function dataTestPlugin(wrapper) {
 		 *
 		 * @param  {string}  name
 		 *     The data-test value to find.
-		 * @returns {import("@vue/test-utils").DOMWrapper[]} Every match in document order, or an empty array.
+		 *
+		 * @returns  {import("@vue/test-utils").DOMWrapper[]}
+		 *     Every match in document order, or an empty array.
 		 */
 		getAllByData(name) {
 			return wrapper.findAll(`[data-test="${name}"]`);

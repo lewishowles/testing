@@ -3,8 +3,15 @@ import { describe, expect, test } from "vite-plus/test";
 import { defineComponent, h } from "vue";
 import { setupVueMounting } from "./setup-vue-mounting.js";
 
-/** A component with one data-test input that has a `type` value and an empty `disabled` attribute. */
+// Provides a data-test input with a `type` value and an empty `disabled`
+// attribute for the matcher tests.
 const TestComponent = defineComponent({
+	/**
+	 * Renders the email input that the matcher tests check.
+	 *
+	 * @returns  {import("vue").VNode}
+	 *     The div containing the input.
+	 */
 	render() {
 		return h("div", [h("input", { "data-test": "profile.email", type: "email", disabled: "" })]);
 	},

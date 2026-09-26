@@ -4,8 +4,15 @@ import { defineComponent, h } from "vue";
 import { installDataTestPlugin } from "./data-test-plugin.js";
 import { setupVueMounting } from "./setup-vue-mounting.js";
 
-/** A component with nested and repeated data-test values for wrapper lookups. */
+// Provides nested and repeated data-test values for wrapper lookup tests.
 const TestComponent = defineComponent({
+	/**
+	 * Renders a form holding an email input and two error messages that share
+	 * one data-test value.
+	 *
+	 * @returns  {import("vue").VNode}
+	 *     The section containing the form.
+	 */
 	render() {
 		return h("section", [
 			h("form", { "data-test": "profile.form" }, [
@@ -41,7 +48,7 @@ describe("Data-test wrapper lookups", () => {
 		wrapper.unmount();
 	});
 
-	test("returns the Vue Test Utils empty result when no element matches", () => {
+	test("returns the Vue Test Utils empty wrapper when no element matches", () => {
 		const wrapper = mount(TestComponent);
 
 		expect(wrapper.getByData("profile.missing").exists()).toBe(false);
