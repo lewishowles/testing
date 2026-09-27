@@ -77,6 +77,29 @@ it("emits click", async () => {
 });
 ```
 
+### `createStubs(entries)`
+
+Creates named stubs that render slots inside Vue Test Utils style `<kebab-name-stub>` elements. Spread the returned object into `global.stubs` alongside ordinary `true` or `false` entries. A string renders the default slot. Use an array to choose slots and their render order, or an object to declare props as well. Other attributes pass through to the stub element.
+
+```js
+import { createMount, createStubs } from "@lewishowles/testing/vue";
+
+const mount = createMount(Page, {
+	global: {
+		stubs: {
+			...createStubs([
+				"UiButton",
+				{ PageTitle: ["default", "introduction"] },
+				{ AlertMessage: { props: ["type"] } },
+			]),
+			IconClose: true,
+		},
+	},
+});
+```
+
+The generated component keeps its name for `findComponent({ name: "PageTitle" })`. Declared props are available through `wrapper.props()` on that stub. Listed slots render directly inside the stub element, without slot props or extra wrappers.
+
 ### `createDeepMount(component, defaultOptions?)`
 
 Same as `createMount` but uses `mount` instead of `shallowMount`, rendering child components in full. Use when the test needs to reach into child component output.
