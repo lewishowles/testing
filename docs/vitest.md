@@ -76,14 +76,19 @@ Do not hide `vi.mock(...)` inside an imported package helper. Vitest needs to se
 
 ### `mockLocalStorage()`
 
-Replaces `window.localStorage` with a Vitest mock and returns the mock object for assertions.
+Replaces `window.localStorage` with an in-memory store and returns the mock object for assertions. Its methods are Vitest spies.
 
-Call once in a setup file or at the top of a describe block. Individual mock calls reset automatically when `vi.clearAllMocks()` runs (e.g. via `clearMocks: true` in your Vitest config).
+Call it in `beforeEach` so every test starts with an empty store. `vi.clearAllMocks()` resets spy calls but does not clear stored values.
 
 ```js
+import { beforeEach, expect, it } from "vite-plus/test";
 import { mockLocalStorage } from "@lewishowles/testing/vitest";
 
-const localStorage = mockLocalStorage();
+let localStorage;
+
+beforeEach(() => {
+	localStorage = mockLocalStorage();
+});
 
 it("saves the token", () => {
 	saveToken("abc123");
@@ -92,7 +97,7 @@ it("saves the token", () => {
 });
 ```
 
-The returned mock exposes `getItem`, `setItem`, `removeItem`, `clear`, `key`, and `length`.
+The returned mock exposes `getItem`, `setItem`, `removeItem`, `clear`, `key`, and a live `length`. Missing keys return `null`, values are stored as strings, and `key(index)` returns `null` outside the stored keys.
 
 ### `setupPinia()`
 

@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Changed
+
+- `mockLocalStorage` now stores values like browser storage while keeping its methods as spies. Missing keys return `null` instead of `undefined`. Stored values last until the next `mockLocalStorage()` call, so call it in `beforeEach` to give each test an empty store.
+
 ## 1.2.1 — 2026-08-03
 
 ### Fixed
