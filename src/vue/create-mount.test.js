@@ -1,6 +1,11 @@
 import { afterEach, describe, expect, test, vi } from "vite-plus/test";
-import { defineComponent, h } from "vue";
-import { cleanupMountedWrappers, createDeepMount, createMount } from "./create-mount.js";
+import { defineComponent, h, inject, onMounted, onUnmounted, useAttrs, useSlots } from "vue";
+import {
+	cleanupMountedWrappers,
+	createDeepMount,
+	createMount,
+	mountComposable,
+} from "./create-mount.js";
 
 // A minimal component with one prop and one child component slot, used to
 // verify mounting, prop passing, and stub behaviour.
@@ -187,6 +192,76 @@ describe("createDeepMount", () => {
 		const wrapper = mount({ label: "deep" });
 
 		expect(wrapper.props("label")).toBe("deep");
+	});
+});
+
+describe("mountComposable", () => {
+	afterEach(cleanupMountedWrappers);
+
+	test("returns the composable result and a mounted wrapper", () => {
+		const result = { count: 1 };
+		const composable = vi.fn(() => result);
+		const { result: composableResult, wrapper } = mountComposable(composable);
+
+		expect(composable).toHaveBeenCalledOnce();
+		expect(composable).toHaveBeenCalledWith();
+		expect(composableResult).toBe(result);
+		expect(wrapper.exists()).toBe(true);
+	});
+
+	test("runs mount and unmount hooks", () => {
+		const mounted = vi.fn();
+		const unmounted = vi.fn();
+
+		const { wrapper } = mountComposable(() => {
+			// Confirm Vue runs the composable's mount hook.
+			onMounted(mounted);
+			// Confirm Vue runs the composable's unmount hook.
+			onUnmounted(unmounted);
+		});
+
+		expect(mounted).toHaveBeenCalledOnce();
+		expect(unmounted).not.toHaveBeenCalled();
+
+		wrapper.unmount();
+
+		expect(unmounted).toHaveBeenCalledOnce();
+	});
+
+	test("passes global provides, slots, attrs, and props to mount", () => {
+		const { result } = mountComposable(
+			() => ({
+				injected: inject("message"),
+				attrs: useAttrs(),
+				slot: useSlots().default?.()[0].children,
+			}),
+			{
+				attrs: { title: "from attrs" },
+				global: { provide: { message: "from app" } },
+				props: { label: "from props" },
+				slots: { default: "slot content" },
+			},
+		);
+
+		expect(result.injected).toBe("from app");
+		expect(result.attrs).toMatchObject({ label: "from props", title: "from attrs" });
+		expect(result.slot).toBe("slot content");
+	});
+
+	test("cleanupMountedWrappers unmounts the composable wrapper", () => {
+		const unmounted = vi.fn();
+
+		const { wrapper } = mountComposable(() => {
+			// Confirm cleanup runs the composable's unmount hook.
+			onUnmounted(unmounted);
+		});
+
+		const unmount = vi.spyOn(wrapper, "unmount");
+
+		cleanupMountedWrappers();
+
+		expect(unmount).toHaveBeenCalledOnce();
+		expect(unmounted).toHaveBeenCalledOnce();
 	});
 });
 

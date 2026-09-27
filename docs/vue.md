@@ -12,7 +12,7 @@ Component mounting utilities for Vitest + `@vue/test-utils`.
 
 ### `setupVueMounting()`
 
-Adds `getByData(name)` and `getAllByData(name)` to Vue Test Utils component and element wrappers, registers `toExist()` and `toHaveAttribute(name, value?)` with Vitest, and registers `afterEach(cleanupMountedWrappers)` for suites that use `createMount` or `createDeepMount`.
+Adds `getByData(name)` and `getAllByData(name)` to Vue Test Utils component and element wrappers, registers `toExist()` and `toHaveAttribute(name, value?)` with Vitest, and registers `afterEach(cleanupMountedWrappers)` for suites that use `createMount`, `createDeepMount`, or `mountComposable`.
 
 Call once in a shared setup file, or at the top of a test suite.
 
@@ -110,12 +110,43 @@ const mount = createDeepMount(MyForm);
 
 ### `cleanupMountedWrappers()`
 
-Unmounts every wrapper created by `createMount` or `createDeepMount` in the current suite, then clears the tracking list.
+Unmounts every wrapper created by `createMount`, `createDeepMount`, or `mountComposable` in the current suite, then clears the tracking list.
 
 Call in `afterEach` to prevent things like `@vueuse/core` event listeners from accumulating across tests.
 
 ```js
 afterEach(cleanupMountedWrappers);
+```
+
+### `mountComposable(fn, options?)`
+
+Returns `{ result, wrapper }`: the composable's return value and the mounted wrapper. The composable runs inside a fully mounted component, so lifecycle hooks and `inject` work as they do in a component. It is called without arguments. You can unmount the wrapper yourself or leave it to `cleanupMountedWrappers`.
+
+Options pass directly to Vue Test Utils `mount`. Use `global.provide` for injected values; `slots` and `attrs` are available through `useSlots` and `useAttrs`. The component declares no props, so values in `props` appear in its attrs. No plugins are installed by default.
+
+```js
+import { vi } from "vite-plus/test";
+import { inject, onMounted } from "vue";
+import { mountComposable, setupVueMounting } from "@lewishowles/testing/vue";
+
+setupVueMounting();
+
+it("reads the provided value after mounting", () => {
+	const mounted = vi.fn();
+	const { result, wrapper } = mountComposable(
+		() => {
+			const message = inject("message");
+			onMounted(mounted);
+
+			return message;
+		},
+		{ global: { provide: { message: "Hello" } } },
+	);
+
+	expect(result).toBe("Hello");
+	expect(mounted).toHaveBeenCalledOnce();
+	expect(wrapper.exists()).toBe(true);
+});
 ```
 
 ### `withAppContext(callback, options?)`

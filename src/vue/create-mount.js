@@ -78,6 +78,46 @@ export function createDeepMount(component, defaultOptions = {}) {
 }
 
 /**
+ * Runs a composable inside a fully mounted component so its lifecycle hooks and
+ * injected values work during the test. The wrapper is tracked for cleanup.
+ *
+ * @param  {Function}  fn
+ *     The composable to call without arguments during component setup.
+ * @param  {object}  options
+ *     Options passed directly to Vue Test Utils `mount`.
+ *
+ * @returns  {object}
+ *     The composable result and the mounted Vue wrapper.
+ */
+export function mountComposable(fn, options = {}) {
+	// The value returned by the composable during component setup.
+	let result;
+
+	// The component that gives the composable a mounted lifecycle and app
+	// context.
+	const component = {
+		/**
+		 * Calls the composable while Vue has an active component instance.
+		 *
+		 * @returns  {Function}
+		 *     An empty render function for the test component.
+		 */
+		setup() {
+			result = fn();
+
+			return () => null;
+		},
+	};
+
+	// The wrapper tracked with other mounted test components for cleanup.
+	const wrapper = mount(component, options);
+
+	mountedWrappers.push(wrapper);
+
+	return { result, wrapper };
+}
+
+/**
  * Unmounts all tracked wrappers and clears the tracking list.
  *
  * Call this in `afterEach` to prevent things like `@vueuse/core` event

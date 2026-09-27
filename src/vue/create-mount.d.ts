@@ -2,7 +2,8 @@ import type { Component } from "vue";
 import type { MountingOptions, VueWrapper } from "@vue/test-utils";
 
 /**
- * These options apply to createMount and its returned mount function.
+ * These options apply to mountComposable, and to createMount, createDeepMount
+ * and the mount functions they return.
  */
 export type MountOptions = MountingOptions<Record<string, unknown>> & Record<string, unknown>;
 
@@ -42,6 +43,20 @@ export declare function createDeepMount(
 	component: Component,
 	defaultOptions?: MountOptions,
 ): (options?: MountOptions | Record<string, unknown>) => VueWrapper;
+
+/**
+ * Runs a composable inside a fully mounted component so its lifecycle hooks and
+ * injected values work during the test. The wrapper is tracked for cleanup.
+ *
+ * @param  fn      The composable to call without arguments during component setup.
+ * @param  options Options passed directly to Vue Test Utils `mount`.
+ *
+ * @returns  The composable result and the mounted Vue wrapper.
+ */
+export declare function mountComposable<Result>(
+	fn: () => Result,
+	options?: MountOptions,
+): { result: Result; wrapper: VueWrapper };
 
 /**
  * Unmounts all tracked wrappers and clears the tracking list.
