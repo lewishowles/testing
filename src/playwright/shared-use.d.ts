@@ -1,6 +1,10 @@
-/** Shared `use` options for Playwright CT and E2E configs. */
+/**
+ * Shared `use` options for Playwright CT and E2E configs.
+ */
 export interface SharedUseOptions {
-	/** The attribute used by `page.getByTestId()`. */
+	/**
+	 * The attribute used by `page.getByTestId()`.
+	 */
 	testIdAttribute: string;
 }
 
@@ -13,4 +17,6 @@ export interface SharedUseOptions {
  * @example
  * export default defineConfig({ use: { ...sharedUse } })
  */
+// Makes `page.getByTestId()` match `data-test`, the same attribute the Vue
+// unit-test `getByData` helpers look up.
 export declare const sharedUse: SharedUseOptions;

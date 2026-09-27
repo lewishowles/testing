@@ -2,27 +2,33 @@ import type { Component } from "vue";
 import type { MountingOptions } from "@vue/test-utils";
 import type { Locator } from "@playwright/test";
 
-/** Options for Playwright CT mount calls. */
+/**
+ * Options for Playwright CT mount calls.
+ */
 export type PlaywrightMountOptions = MountingOptions<Record<string, unknown>> &
 	Record<string, unknown>;
 
-/** Playwright's mount fixture from the component test context. */
+/**
+ * Playwright's mount fixture from the component test context.
+ */
 export type MountFixture = (
 	component: Component,
 	options?: Record<string, unknown>,
 ) => Promise<Locator>;
 
 /**
- * Returns a function that mounts the given component in a Playwright component
- * test with shared default options, removing the need to specify a `props` key
- * when only props are provided.
+ * Creates a mount function for a Playwright component test. When a call passes
+ * only props, they can be given directly without a `props` key.
  *
- * Any default options passed here are deep-merged with per-call options on
- * each mount.
+ * Default options are deep-merged with per-call options on each mount.
  *
- * @param  component      The Vue component to mount.
- * @param  defaultOptions Options applied to every mount call unless overridden.
- * @returns A mount function that accepts Playwright's mount fixture and per-call options.
+ * @param  component
+ *     The Vue component to mount.
+ * @param  defaultOptions
+ *     Options applied to every mount call unless overridden.
+ *
+ * @returns
+ *     A function that mounts the component with Playwright's mount fixture.
  *
  * @example
  * const mount = createMount(MyComponent, { props: { label: "default" } });
@@ -38,10 +44,10 @@ export declare function createMount(
 ) => Promise<Locator>;
 
 /**
- * Minimal SVG string for use in slot tests.
+ * An empty 24 by 24 SVG for filling icon or image slots in component tests.
  *
- * Playwright CT's string-only slot API does not accept component references,
- * so this provides a valid SVG placeholder where an icon or image slot is
- * required.
+ * Playwright CT slots accept only strings, so a test cannot pass an icon
+ * component there.
  */
+// The SVG markup to pass as slot content.
 export declare const slotSvg: string;

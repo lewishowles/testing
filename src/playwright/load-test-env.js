@@ -6,8 +6,8 @@ import { join } from "node:path";
  * Pass the directory of the calling config file so the `.env` path is resolved
  * relative to the project root, not this package.
  *
- * Silently does nothing when `.env` is absent — in CI, environment variables
- * come from the environment directly.
+ * Does nothing when `.env` is missing or cannot be read, because CI sets
+ * environment variables directly.
  *
  * @param  {string}  configDir
  *     Absolute path to the directory containing the Playwright config file.
@@ -20,6 +20,8 @@ export function loadTestEnv(configDir) {
 	try {
 		process.loadEnvFile(join(configDir, "../.env"));
 	} catch {
-		// No .env present — CI provides env vars directly.
+		// Carry on without a .env that is missing or cannot be read, because CI
+		// sets environment variables directly.
+		return;
 	}
 }

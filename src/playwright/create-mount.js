@@ -1,17 +1,18 @@
 import { mergeMountOptions, normaliseMountOptions } from "../shared/create-mount-options.js";
 
 /**
- * Returns a function that mounts the given component in a Playwright component
- * test with shared default options, removing the need to specify a `props` key
- * when only props are provided.
+ * Creates a mount function for a Playwright component test. When a call passes
+ * only props, they can be given directly without a `props` key.
  *
- * Any default options passed here are deep-merged with per-call options on
- * each mount.
+ * Default options are deep-merged with per-call options on each mount.
  *
  * @param  {object}  component
  *     The Vue component to mount.
  * @param  {object}  defaultOptions
  *     Options applied to every mount call unless overridden.
+ *
+ * @returns  {Function}
+ *     A function that mounts the component with Playwright's mount fixture.
  *
  * @example
  * const mount = createMount(MyComponent, { props: { label: "default" } });
@@ -30,6 +31,7 @@ export function createMount(component, defaultOptions = {}) {
 	 *     Options for this individual mount call.
 	 */
 	return function mountComponent(mount, options = {}) {
+		// The per-call options, with a props-only object moved under `props`.
 		const providedOptions = normaliseMountOptions(options, ["props", "slots", "global"]);
 
 		return mount(component, mergeMountOptions(defaultOptions, providedOptions));
@@ -37,10 +39,10 @@ export function createMount(component, defaultOptions = {}) {
 }
 
 /**
- * Minimal SVG string for use in slot tests.
+ * An empty 24 by 24 SVG for filling icon or image slots in component tests.
  *
- * Playwright CT's string-only slot API does not accept component references,
- * so this provides a valid SVG placeholder where an icon or image slot is
- * required.
+ * Playwright CT slots accept only strings, so a test cannot pass an icon
+ * component there.
  */
+// The SVG markup to pass as slot content.
 export const slotSvg = "<svg width='24' height='24' viewBox='0 0 24 24'></svg>";
