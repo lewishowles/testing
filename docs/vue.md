@@ -8,6 +8,8 @@ Component mounting utilities for Vitest + `@vue/test-utils`.
 - `pinia`
 - `@pinia/colada`
 
+`vue-router` is needed in a test project that uses `createRouterMock`.
+
 ## Exports
 
 ### `setupVueMounting()`
@@ -100,6 +102,42 @@ const mount = createMount(Page, {
 
 The generated component keeps its name for `findComponent({ name: "PageTitle" })`. Declared props are available through `wrapper.props()` on that stub. Listed slots render directly inside the stub element, without slot props or extra wrappers.
 
+### `createRouterMock()`
+
+Creates a reactive route and router spies for tests that replace `vue-router`. The route starts with `name: null`, empty `params`, `query`, `matched`, and `meta`, and `path: "/"`. The router has `push`, `replace`, `back`, `resolve`, and `getRoutes` spies. By default, `resolve` returns a route-like object with an `href`, and `getRoutes` returns an empty array.
+
+Create the mock inside `vi.hoisted`, then pass its module exports to `vi.mock` in the test file:
+
+```js
+import { expect, vi } from "vite-plus/test";
+
+const routerMock = await vi.hoisted(async () =>
+	(await import("@lewishowles/testing/vue")).createRouterMock(),
+);
+vi.mock("vue-router", () => routerMock);
+
+import { useRoute, useRouter } from "vue-router";
+
+routerMock.setRoute({ name: "member", params: { id: "7" } });
+expect(useRoute().params.id).toBe("7");
+expect(useRouter()).toBe(routerMock.router);
+```
+
+`setRoute` changes the same reactive route object. Fields left out of a call return to their defaults. Call `reset()` in `afterEach` to restore the route, clear all router spy calls, and undo any overrides a test set on the spies.
+
+For a partial mock, keep the real exports and replace only `useRoute` and `useRouter`:
+
+```js
+const routerMock = await vi.hoisted(async () =>
+	(await import("@lewishowles/testing/vue")).createRouterMock(),
+);
+vi.mock("vue-router", async (importOriginal) => ({
+	...(await importOriginal()),
+	useRoute: routerMock.useRoute,
+	useRouter: routerMock.useRouter,
+}));
+```
+
 ### `createDeepMount(component, defaultOptions?)`
 
 Same as `createMount` but uses `mount` instead of `shallowMount`, rendering child components in full. Use when the test needs to reach into child component output.
@@ -125,7 +163,7 @@ Returns `{ result, wrapper }`: the composable's return value and the mounted wra
 Options pass directly to Vue Test Utils `mount`. Use `global.provide` for injected values; `slots` and `attrs` are available through `useSlots` and `useAttrs`. The component declares no props, so values in `props` appear in its attrs. No plugins are installed by default.
 
 ```js
-import { vi } from "vite-plus/test";
+import { expect, vi } from "vite-plus/test";
 import { inject, onMounted } from "vue";
 import { mountComposable, setupVueMounting } from "@lewishowles/testing/vue";
 
