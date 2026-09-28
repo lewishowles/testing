@@ -110,15 +110,16 @@ Create the mock inside `vi.hoisted`, then pass its module exports to `vi.mock` i
 
 ```js
 import { expect, vi } from "vite-plus/test";
+import { useRoute, useRouter } from "vue-router";
 
 const routerMock = await vi.hoisted(async () =>
 	(await import("@lewishowles/testing/vue")).createRouterMock(),
 );
+
 vi.mock("vue-router", () => routerMock);
 
-import { useRoute, useRouter } from "vue-router";
-
 routerMock.setRoute({ name: "member", params: { id: "7" } });
+
 expect(useRoute().params.id).toBe("7");
 expect(useRouter()).toBe(routerMock.router);
 ```
@@ -131,12 +132,41 @@ For a partial mock, keep the real exports and replace only `useRoute` and `useRo
 const routerMock = await vi.hoisted(async () =>
 	(await import("@lewishowles/testing/vue")).createRouterMock(),
 );
+
 vi.mock("vue-router", async (importOriginal) => ({
 	...(await importOriginal()),
 	useRoute: routerMock.useRoute,
 	useRouter: routerMock.useRouter,
 }));
 ```
+
+### `createApiMock(overrides?)`
+
+Creates a mock for an app API composable with one shared API object. It provides spies for `get`, `post`, `put`, `patch`, `delete`, `head`, `options`, `setAuthToken`, and `hasAuthToken`. The `isLoading` and `isReady` members are plain `{ value: false }` objects. Pass `overrides` to replace a member or add an app-specific one.
+
+Create the mock inside `vi.hoisted`, then mock the path your app imports:
+
+```js
+import { afterEach, expect, test, vi } from "vite-plus/test";
+import useApi from "@/composables/api/use-api";
+
+const apiMock = await vi.hoisted(async () =>
+	(await import("@lewishowles/testing/vue")).createApiMock(),
+);
+
+vi.mock("@/composables/api/use-api", () => apiMock);
+
+afterEach(() => apiMock.reset());
+
+test("loads the member", async () => {
+	apiMock.api.get.mockResolvedValue({ id: "7" });
+
+	expect(await useApi().get("/members/7")).toEqual({ id: "7" });
+	expect(apiMock.api.get).toHaveBeenCalledWith("/members/7");
+});
+```
+
+`reset()` puts the API back as it was created: it removes members added since, restores replaced ones and each spy's implementation, clears call history and one-off queued responses, and returns state values to their starting values. Tests keep the same API and state objects, so references taken before a reset still work.
 
 ### `createDeepMount(component, defaultOptions?)`
 

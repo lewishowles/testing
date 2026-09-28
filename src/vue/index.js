@@ -1,3 +1,4 @@
+export { createApiMock } from "./create-api-mock.js";
 export {
 	cleanupMountedWrappers,
 	createDeepMount,
