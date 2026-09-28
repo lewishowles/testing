@@ -33,6 +33,8 @@ export const mockRouterModule = {
  * setRoute({ name: "member", params: { id: "7" } });
  */
 export function setRoute(fields) {
+	// A fresh copy of the default route, which decides the fields to keep and
+	// supplies their reset values.
 	const defaults = defaultRoute();
 
 	// Remove fields such as hash that an earlier test set, so they do not carry
