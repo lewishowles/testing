@@ -119,7 +119,7 @@ Creates a reactive route and router spies for tests that replace `vue-router`. T
 Create the mock inside `vi.hoisted`, then pass its module exports to `vi.mock` in the test file:
 
 ```js
-import { expect, vi } from "vite-plus/test";
+import { expect, vi } from "vitest";
 import { useRoute, useRouter } from "vue-router";
 
 const routerMock = await vi.hoisted(async () =>
@@ -157,7 +157,7 @@ Creates a mock for an app API composable with one shared API object. It provides
 Create the mock inside `vi.hoisted`, then mock the path your app imports:
 
 ```js
-import { afterEach, expect, test, vi } from "vite-plus/test";
+import { afterEach, expect, test, vi } from "vitest";
 import useApi from "@/composables/api/use-api";
 
 const apiMock = await vi.hoisted(async () =>
@@ -203,7 +203,7 @@ Returns `{ result, wrapper }`: the composable's return value and the mounted wra
 Options pass directly to Vue Test Utils `mount`. Use `global.provide` for injected values; `slots` and `attrs` are available through `useSlots` and `useAttrs`. The component declares no props, so values in `props` appear in its attrs. No plugins are installed by default.
 
 ```js
-import { expect, vi } from "vite-plus/test";
+import { expect, vi } from "vitest";
 import { inject, onMounted } from "vue";
 import { mountComposable } from "@lewishowles/testing/vue";
 

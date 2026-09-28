@@ -18,7 +18,7 @@ Keep API module mocks in your project, close to the module shape they replace. `
 Use `vi.hoisted` for mock handlers referenced by `vi.mock(...)`, then export the handlers so tests can set responses and assert calls.
 
 ```js
-import { beforeEach, vi } from "vite-plus/test";
+import { beforeEach, vi } from "vitest";
 
 const mockGet = vi.hoisted(() => vi.fn());
 const mockPost = vi.hoisted(() => vi.fn());
@@ -81,7 +81,7 @@ Replaces `window.localStorage` with an in-memory store and returns the mock obje
 Call it in `beforeEach` so every test starts with an empty store. `vi.clearAllMocks()` resets spy calls but does not clear stored values.
 
 ```js
-import { beforeEach, expect, it } from "vite-plus/test";
+import { beforeEach, expect, it } from "vitest";
 import { mockLocalStorage } from "@lewishowles/testing/vitest";
 
 let localStorage;
