@@ -64,7 +64,7 @@ Returns a mount function for a single component. Every call deep-merges your per
 
 Uses `shallowMount` by default, which stubs child components. `RouterLink` is always stubbed via `RouterLinkStub`.
 
-Pass options as a flat object to treat them as props, or use the full `{ props, slots, global, attrs }` shape when you need more control.
+Pass options as a flat object to treat them as props, or use the full `{ props, slots, global, attrs, stubs }` shape when you need more control. Put a prop named `stubs` inside `props` rather than using the flat shorthand.
 
 ```js
 import { createMount } from "@lewishowles/testing/vue";
@@ -91,24 +91,26 @@ it("emits click", async () => {
 
 ### `createStubs(entries)`
 
-Creates named stubs that render slots inside Vue Test Utils style `<kebab-name-stub>` elements. Spread the returned object into `global.stubs` alongside ordinary `true` or `false` entries. A string renders the default slot. Use an array to choose slots and their render order, or an object to declare props as well. Other attributes pass through to the stub element.
+Creates named stubs that render slots inside Vue Test Utils style `<kebab-name-stub>` elements. Pass the list as `stubs` to `createMount`, either in its defaults or for one mount call. A string renders the default slot. Use an array to choose slots and their render order, or an object to declare props as well. Other attributes pass through to the stub element.
 
 ```js
-import { createMount, createStubs } from "@lewishowles/testing/vue";
+import { createMount } from "@lewishowles/testing/vue";
 
 const mount = createMount(Page, {
+	stubs: [
+		"UiButton",
+		{ PageTitle: ["default", "introduction"] },
+		{ AlertMessage: { props: ["type"] } },
+	],
 	global: {
 		stubs: {
-			...createStubs([
-				"UiButton",
-				{ PageTitle: ["default", "introduction"] },
-				{ AlertMessage: { props: ["type"] } },
-			]),
 			IconClose: true,
 		},
 	},
 });
 ```
+
+`global.stubs` still accepts ordinary `true` or `false` entries. If both options name the same component, the entry in `global.stubs` wins.
 
 The generated component keeps its name for `findComponent({ name: "PageTitle" })`. Declared props are available through `wrapper.props()` on that stub. Listed slots render directly inside the stub element, without slot props or extra wrappers.
 

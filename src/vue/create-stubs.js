@@ -2,8 +2,9 @@ import { defineComponent, h } from "vue";
 
 /**
  * Creates named stubs that render the requested slots inside Vue Test Utils
- * style stub elements. Spread the result into `global.stubs` alongside ordinary
- * `true` or `false` entries.
+ * style stub elements. Most tests pass the same list as the `stubs` option of
+ * `createMount` instead of calling this directly. The result can also be spread
+ * into `global.stubs` alongside ordinary `true` or `false` entries.
  *
  * @param  {(string|object)[]}  entries
  *     The components to stub. Each entry is a component name, which renders the

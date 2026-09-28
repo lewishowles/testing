@@ -1,11 +1,22 @@
 import type { Component } from "vue";
 import type { MountingOptions, VueWrapper } from "@vue/test-utils";
+import type { StubEntry } from "./create-stubs.js";
 
 /**
- * These options apply to mountComposable, and to createMount, createDeepMount
- * and the mount functions they return.
+ * Vue Test Utils options passed to mountComposable or a mount function.
  */
 export type MountOptions = MountingOptions<Record<string, unknown>> & Record<string, unknown>;
+
+/**
+ * Options accepted by createMount, createDeepMount and their mount functions.
+ */
+export type CreateMountOptions = MountOptions & {
+	/**
+	 * Components to replace with named stubs, in the list form createStubs
+	 * accepts.
+	 */
+	stubs?: StubEntry[];
+};
 
 /**
  * Creates a mount function with shared defaults. When a call passes only props,
@@ -26,9 +37,9 @@ export type MountOptions = MountingOptions<Record<string, unknown>> & Record<str
  */
 export declare function createMount(
 	component: Component,
-	defaultOptions?: MountOptions,
+	defaultOptions?: CreateMountOptions,
 	mountFunction?: (component: Component, options?: MountOptions) => VueWrapper,
-): (options?: MountOptions | Record<string, unknown>) => VueWrapper;
+): (options?: CreateMountOptions | Record<string, unknown>) => VueWrapper;
 
 /**
  * Returns a mount function using `mount` instead of `shallowMount`, rendering
@@ -41,8 +52,8 @@ export declare function createMount(
  */
 export declare function createDeepMount(
 	component: Component,
-	defaultOptions?: MountOptions,
-): (options?: MountOptions | Record<string, unknown>) => VueWrapper;
+	defaultOptions?: CreateMountOptions,
+): (options?: CreateMountOptions | Record<string, unknown>) => VueWrapper;
 
 /**
  * Runs a composable inside a fully mounted component so its lifecycle hooks and

@@ -1,5 +1,6 @@
 import { RouterLinkStub, mount, shallowMount } from "@vue/test-utils";
 import { mergeMountOptions, normaliseMountOptions } from "../shared/create-mount-options.js";
+import { createStubs } from "./create-stubs.js";
 
 // All wrappers mounted during a test run, used to clean up after each test.
 const mountedWrappers = [];
@@ -35,9 +36,13 @@ const globalOptions = {
  *     A function that mounts the component with per-call options.
  */
 export function createMount(component, defaultOptions = {}, mountFunction = shallowMount) {
+	// The defaults with any `stubs` list turned into stub components once, so
+	// every mount call shares the same stub components.
+	const defaultMountOptions = withStubs(defaultOptions);
+
 	/**
 	 * Mount the component, treating a plain object of options as props unless
-	 * `props`, `slots`, `global`, or `attrs` keys are present.
+	 * `props`, `slots`, `global`, `attrs`, or `stubs` keys are present.
 	 *
 	 * @param  {object}  options
 	 *     Options for this individual mount call.
@@ -47,17 +52,54 @@ export function createMount(component, defaultOptions = {}, mountFunction = shal
 	 */
 	return function (options = {}) {
 		// This mount's options, with a props-only object moved under `props`.
-		const providedOptions = normaliseMountOptions(options, ["props", "slots", "global", "attrs"]);
+		const providedOptions = normaliseMountOptions(options, [
+			"props",
+			"slots",
+			"global",
+			"attrs",
+			"stubs",
+		]);
 
 		// The wrapper tracked for cleanup after the test.
 		const wrapper = mountFunction(
 			component,
-			mergeMountOptions(defaultOptions, globalOptions, providedOptions),
+			mergeMountOptions(defaultMountOptions, globalOptions, withStubs(providedOptions)),
 		);
 
 		mountedWrappers.push(wrapper);
 
 		return wrapper;
+	};
+}
+
+/**
+ * Moves a top-level `stubs` list into `global.stubs`, turning each entry into a
+ * named stub with `createStubs`. When the same options also name a component
+ * directly in `global.stubs`, that entry wins.
+ *
+ * @param  {object}  options
+ *     The defaults or per-call options supplied to createMount.
+ *
+ * @returns  {object}
+ *     Mount options with any top-level stubs moved under global.stubs.
+ */
+function withStubs(options) {
+	if (!Object.hasOwn(options, "stubs")) {
+		return options;
+	}
+
+	// The stubs list, and the options Vue Test Utils understands.
+	const { stubs, ...mountOptions } = options;
+
+	return {
+		...mountOptions,
+		global: {
+			...options.global,
+			stubs: {
+				...createStubs(stubs),
+				...options.global?.stubs,
+			},
+		},
 	};
 }
 

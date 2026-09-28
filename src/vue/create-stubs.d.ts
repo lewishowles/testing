@@ -6,10 +6,11 @@ import type { Component } from "vue";
 export type StubEntry = string | Record<string, string[] | { slots?: string[]; props?: string[] }>;
 
 /**
- * Creates named slot-rendering stubs to spread into `global.stubs`. String
- * entries render the default slot. Object entries can list slots in render
- * order and declare props so Vue Test Utils exposes them through
- * `wrapper.props()`.
+ * Creates named slot-rendering stubs. Most tests pass the same list as the
+ * `stubs` option of `createMount` instead of calling this directly. The result
+ * can also be spread into `global.stubs`. String entries render the default
+ * slot. Object entries can list slots in render order and declare props so Vue
+ * Test Utils exposes them through `wrapper.props()`.
  *
  * @param  entries
  *     Component names, or objects mapping one name to a slot list or to an

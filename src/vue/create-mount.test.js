@@ -89,6 +89,19 @@ describe("createMount", () => {
 
 			expect(() => mount({ slots: { default: "slot content" } })).not.toThrow();
 		});
+
+		test("treats a stubs list as mount options rather than props", () => {
+			const mountFunction = vi.fn(() => ({ unmount: vi.fn() }));
+			const mount = createMount(ParentComponent, {}, mountFunction);
+
+			mount({ stubs: ["ChildComponent"] });
+
+			const options = mountFunction.mock.calls[0][1];
+
+			expect(options.props).toBeUndefined();
+			expect(options.stubs).toBeUndefined();
+			expect(options.global.stubs.ChildComponent).toBeTypeOf("object");
+		});
 	});
 
 	describe("default options", () => {
@@ -104,6 +117,53 @@ describe("createMount", () => {
 			const wrapper = mount();
 
 			expect(wrapper.props("label")).toBe("default");
+		});
+
+		test("applies a default stubs list", () => {
+			const mount = createDeepMount(ParentComponent, { stubs: ["ChildComponent"] });
+			const wrapper = mount();
+
+			expect(wrapper.find("child-component-stub").exists()).toBe(true);
+			expect(wrapper.find(".child").exists()).toBe(false);
+		});
+
+		test("merges a stubs list with global.stubs", () => {
+			const mountFunction = vi.fn(() => ({ unmount: vi.fn() }));
+			const mount = createMount(ParentComponent, {}, mountFunction);
+
+			mount({ stubs: ["ChildComponent"], global: { stubs: { IconClose: true } } });
+
+			const options = mountFunction.mock.calls[0][1];
+
+			expect(options.global.stubs.ChildComponent).toBeTypeOf("object");
+			expect(options.global.stubs.IconClose).toBe(true);
+		});
+
+		test("prefers a direct global stub on a name clash", () => {
+			const mountFunction = vi.fn(() => ({ unmount: vi.fn() }));
+			const mount = createMount(ParentComponent, {}, mountFunction);
+
+			mount({ stubs: ["ChildComponent"], global: { stubs: { ChildComponent: true } } });
+
+			const options = mountFunction.mock.calls[0][1];
+
+			expect(options.global.stubs.ChildComponent).toBe(true);
+		});
+
+		test("lets per-call stubs override default global stubs", () => {
+			const mountFunction = vi.fn(() => ({ unmount: vi.fn() }));
+
+			const mount = createMount(
+				ParentComponent,
+				{ global: { stubs: { ChildComponent: true } } },
+				mountFunction,
+			);
+
+			mount({ stubs: ["ChildComponent"] });
+
+			const options = mountFunction.mock.calls[0][1];
+
+			expect(options.global.stubs.ChildComponent).toBeTypeOf("object");
 		});
 
 		test("preserves stub identity so findComponent matches by reference", () => {
