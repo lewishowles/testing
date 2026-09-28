@@ -1,7 +1,7 @@
 import { mount } from "@vue/test-utils";
 import { describe, expect, test } from "vite-plus/test";
 import { defineComponent, h } from "vue";
-import { setupVueMounting } from "./setup-vue-mounting.js";
+import { setupVueTests } from "./setup-vue-tests.js";
 
 // Provides a data-test input with a `type` value and an empty `disabled`
 // attribute for the matcher tests.
@@ -18,7 +18,7 @@ const TestComponent = defineComponent({
 });
 
 describe("Wrapper matchers", () => {
-	setupVueMounting();
+	setupVueTests();
 
 	test("checks whether a data-test lookup exists with and without .not", () => {
 		const wrapper = mount(TestComponent);

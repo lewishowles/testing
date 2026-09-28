@@ -2,7 +2,7 @@ import { config, mount } from "@vue/test-utils";
 import { afterEach, describe, expect, test, vi } from "vite-plus/test";
 import { defineComponent, h } from "vue";
 import { installDataTestPlugin } from "./data-test-plugin.js";
-import { setupVueMounting } from "./setup-vue-mounting.js";
+import { setupVueTests } from "./setup-vue-tests.js";
 
 // Provides nested and repeated data-test values for wrapper lookup tests.
 const TestComponent = defineComponent({
@@ -25,7 +25,7 @@ const TestComponent = defineComponent({
 });
 
 describe("Data-test wrapper lookups", () => {
-	setupVueMounting();
+	setupVueTests();
 
 	afterEach(() => {
 		vi.restoreAllMocks();

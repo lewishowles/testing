@@ -1,7 +1,7 @@
 import { dataTestValues } from "./data-test-plugin.js";
 
-// The Vitest matchers for Vue Test Utils wrappers. `setupVueMounting()`
-// registers them.
+// The Vitest matchers for Vue Test Utils wrappers. `setupVueTests()` registers
+// them.
 export const wrapperMatchers = {
 	/**
 	 * Passes when a lookup found an element.

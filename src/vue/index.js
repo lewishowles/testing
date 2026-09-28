@@ -7,5 +7,5 @@ export {
 } from "./create-mount.js";
 export { createRouterMock } from "./create-router-mock.js";
 export { createStubs } from "./create-stubs.js";
-export { setupVueMounting } from "./setup-vue-mounting.js";
+export { setupVueMounting, setupVueTests } from "./setup-vue-tests.js";
 export { withAppContext } from "./with-app-context.js";

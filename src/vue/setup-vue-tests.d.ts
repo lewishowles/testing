@@ -7,6 +7,14 @@ import "./wrapper-matchers.js";
  * registers an `afterEach` hook that unmounts wrappers from `createMount`,
  * `createDeepMount`, and `mountComposable`.
  *
- * Call once at the top of a setup file or test suite.
+ * Call once in the project's Vitest setup file.
+ */
+export declare function setupVueTests(): void;
+
+/**
+ * The earlier name for `setupVueTests`, kept so existing setup files keep
+ * working until the next major release.
+ *
+ * @deprecated Use setupVueTests instead.
  */
 export declare function setupVueMounting(): void;

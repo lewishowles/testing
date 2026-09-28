@@ -9,13 +9,23 @@ import { wrapperMatchers } from "./wrapper-matchers.js";
  * registers an `afterEach` hook that unmounts wrappers from `createMount`,
  * `createDeepMount`, and `mountComposable`.
  *
- * Call once at the top of a setup file or test suite.
+ * Call once in the project's Vitest setup file.
  */
-export function setupVueMounting() {
+export function setupVueTests() {
 	installDataTestPlugin();
 	expect.extend(wrapperMatchers);
 
 	afterEach(() => {
 		cleanupMountedWrappers();
 	});
+}
+
+/**
+ * The earlier name for `setupVueTests`, kept so existing setup files keep
+ * working until the next major release.
+ *
+ * @deprecated Use setupVueTests instead.
+ */
+export function setupVueMounting() {
+	setupVueTests();
 }

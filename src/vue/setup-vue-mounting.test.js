@@ -1,40 +1,40 @@
-import { describe, expect, test } from "vite-plus/test";
+import { describe, expect, test, vi } from "vite-plus/test";
 import { defineComponent, h } from "vue";
 import { createMount } from "./create-mount.js";
-import { setupVueMounting } from "./setup-vue-mounting.js";
-
-// Track component unmounts to verify the registered afterEach hook.
-let unmountCount = 0;
-
-// A minimal component with an unmount hook, used to prove wrapper cleanup runs.
-const TestComponent = defineComponent({
-	/**
-	 * Counts unmounts so the test can check that cleanup ran.
-	 */
-	unmounted() {
-		unmountCount += 1;
-	},
-	/**
-	 * Renders a component for the cleanup test to mount.
-	 *
-	 * @returns  {object}
-	 *     The rendered test node.
-	 */
-	render() {
-		return h("div", "Mounted");
-	},
-});
+import { setupVueMounting } from "./setup-vue-tests.js";
 
 describe("setupVueMounting", () => {
+	// Track whether the alias registers wrapper cleanup after each test.
+	const unmounted = vi.fn();
+
 	setupVueMounting();
 
-	test("registers cleanup after each test", () => {
-		const mount = createMount(TestComponent);
+	test("the alias installs lookups and matchers", () => {
+		const mount = createMount(
+			defineComponent({
+				// Records when the mounted component is removed.
+				unmounted,
+				/**
+				 * Renders an element for the alias lookup and matcher checks.
+				 *
+				 * @returns  {object}
+				 *     The rendered test node.
+				 */
+				render() {
+					return h("div", { "data-test": "example", title: "Example" });
+				},
+			}),
+		);
 
-		mount();
+		const wrapper = mount();
+		const element = wrapper.getByData("example");
+
+		expect(wrapper.getAllByData("example")).toHaveLength(1);
+		expect(element).toExist();
+		expect(element).toHaveAttribute("title", "Example");
 	});
 
-	test("unmounts wrappers created by createMount", () => {
-		expect(unmountCount).toBe(1);
+	test("the alias unmounts wrappers after each test", () => {
+		expect(unmounted).toHaveBeenCalledOnce();
 	});
 });

@@ -12,16 +12,28 @@ Component mounting utilities for Vitest + `@vue/test-utils`.
 
 ## Exports
 
-### `setupVueMounting()`
+### `setupVueTests()`
 
 Adds `getByData(name)` and `getAllByData(name)` to Vue Test Utils component and element wrappers, registers `toExist()` and `toHaveAttribute(name, value?)` with Vitest, and registers `afterEach(cleanupMountedWrappers)` for suites that use `createMount`, `createDeepMount`, or `mountComposable`.
 
-Call once in a shared setup file, or at the top of a test suite.
+Call it once in your project's Vitest setup file, such as `test/unit/setup.js`. List that file in `test.setupFiles` so Vitest loads it before each test file. `setupVueMounting()` remains available as a deprecated alias.
 
 ```js
-import { setupVueMounting } from "@lewishowles/testing/vue";
+// vitest.config.js
+import { defineConfig } from "vitest/config";
 
-setupVueMounting();
+export default defineConfig({
+	test: {
+		setupFiles: ["./test/unit/setup.js"],
+	},
+});
+```
+
+```js
+// test/unit/setup.js
+import { setupVueTests } from "@lewishowles/testing/vue";
+
+setupVueTests();
 ```
 
 Use the methods to find descendants by their `data-test` value. `getByData` returns a wrapper whose `exists()` returns `false` when nothing matches. `getAllByData` returns an empty array when nothing matches. Both methods also work on an element returned by a lookup.
@@ -55,13 +67,11 @@ Uses `shallowMount` by default, which stubs child components. `RouterLink` is al
 Pass options as a flat object to treat them as props, or use the full `{ props, slots, global, attrs }` shape when you need more control.
 
 ```js
-import { createMount, setupVueMounting } from "@lewishowles/testing/vue";
+import { createMount } from "@lewishowles/testing/vue";
 
 import MyButton from "./my-button.vue";
 
 const mount = createMount(MyButton, { props: { label: "Save" } });
-
-setupVueMounting();
 
 it("renders the label", () => {
 	// Flat object → treated as props
@@ -195,9 +205,7 @@ Options pass directly to Vue Test Utils `mount`. Use `global.provide` for inject
 ```js
 import { expect, vi } from "vite-plus/test";
 import { inject, onMounted } from "vue";
-import { mountComposable, setupVueMounting } from "@lewishowles/testing/vue";
-
-setupVueMounting();
+import { mountComposable } from "@lewishowles/testing/vue";
 
 it("reads the provided value after mounting", () => {
 	const mounted = vi.fn();
