@@ -1,4 +1,17 @@
-export { createApiMock } from "./create-api-mock.js";
+export {
+	mockApiModule,
+	mockDelete,
+	mockGet,
+	mockHasAuthToken,
+	mockHead,
+	mockIsLoading,
+	mockIsReady,
+	mockOptions,
+	mockPatch,
+	mockPost,
+	mockPut,
+	mockSetAuthToken,
+} from "./mock-api.js";
 export {
 	cleanupMountedWrappers,
 	createDeepMount,

@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vite-plus/test";
 import { defineComponent, h } from "vue";
 import { createMount } from "./create-mount.js";
+import { mockGet } from "./mock-api.js";
 import { setupVueTests } from "./setup-vue-tests.js";
 
 // Track component unmounts to verify the registered afterEach hook.
@@ -9,10 +10,14 @@ let unmountCount = 0;
 // A minimal component with an unmount hook, used to prove wrapper cleanup runs.
 const TestComponent = defineComponent({
 	/**
-	 * Counts unmounts so the test can check that cleanup ran.
+	 * Counts unmounts so the test can check that cleanup ran, and calls the
+	 * shared GET spy so the test can check that the API mocks are reset after
+	 * the wrappers are unmounted.
 	 */
 	unmounted() {
 		unmountCount += 1;
+
+		mockGet();
 	},
 	/**
 	 * Renders a component for the cleanup test to mount.
@@ -34,7 +39,8 @@ describe("setupVueTests", () => {
 		mount();
 	});
 
-	test("unmounts wrappers created by createMount", () => {
+	test("unmounts wrappers created by createMount, then resets the API mocks", () => {
 		expect(unmountCount).toBe(1);
+		expect(mockGet).not.toHaveBeenCalled();
 	});
 });

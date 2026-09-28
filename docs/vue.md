@@ -14,7 +14,7 @@ Component mounting utilities for Vitest + `@vue/test-utils`.
 
 ### `setupVueTests()`
 
-Adds `getByData(name)` and `getAllByData(name)` to Vue Test Utils component and element wrappers, registers `toExist()` and `toHaveAttribute(name, value?)` with Vitest, and registers `afterEach(cleanupMountedWrappers)` for suites that use `createMount`, `createDeepMount`, or `mountComposable`.
+Adds `getByData(name)` and `getAllByData(name)` to Vue Test Utils component and element wrappers, registers `toExist()` and `toHaveAttribute(name, value?)` with Vitest, and unmounts tracked wrappers and resets the shared API mocks after each test.
 
 Call it once in your project's Vitest setup file, such as `test/unit/setup.js`. List that file in `test.setupFiles` so Vitest loads it before each test file. `setupVueMounting()` remains available as a deprecated alias.
 
@@ -150,33 +150,76 @@ vi.mock("vue-router", async (importOriginal) => ({
 }));
 ```
 
-### `createApiMock(overrides?)`
+### Shared API mocks
 
-Creates a mock for an app API composable with one shared API object. It provides spies for `get`, `post`, `put`, `patch`, `delete`, `head`, `options`, `setAuthToken`, and `hasAuthToken`. The `isLoading` and `isReady` members are plain `{ value: false }` objects. Pass `overrides` to replace a member or add an app-specific one.
+The package exports `mockGet`, `mockPost`, `mockPut`, `mockPatch`, `mockDelete`, `mockHead`, `mockOptions`, `mockSetAuthToken`, and `mockHasAuthToken` as shared spies. `mockIsLoading` and `mockIsReady` are plain `{ value: false }` objects. `mockApiModule.default()` returns one API object holding exactly those members.
 
-Create the mock inside `vi.hoisted`, then mock the path your app imports:
+Mock your app's API composable once in its Vitest setup file, alongside `setupVueTests()`:
 
 ```js
-import { afterEach, expect, test, vi } from "vitest";
-import useApi from "@/composables/api/use-api";
+// test/unit/setup.js
+import { vi } from "vitest";
+import { setupVueTests } from "@lewishowles/testing/vue";
 
-const apiMock = await vi.hoisted(async () =>
-	(await import("@lewishowles/testing/vue")).createApiMock(),
+vi.mock(
+	"@/composables/api/use-api",
+	async () => (await import("@lewishowles/testing/vue")).mockApiModule,
 );
 
-vi.mock("@/composables/api/use-api", () => apiMock);
+setupVueTests();
+```
 
-afterEach(() => apiMock.reset());
+Tests import the spies by name. After each test, `setupVueTests()` clears every shared spy's calls and the responses a test set, including queued one-off responses, and sets `mockIsLoading` and `mockIsReady` back to `false`. It also puts back any shared member a test replaced and removes any member a test added. The spies and state objects stay the same, so references a test holds stay valid. To change what a method returns, set it on the spy (for example `mockGet.mockResolvedValue(...)`) rather than replacing the method on the API object, because a project that adds extra methods returns its own copy of that object, and that copy isn't restored.
+
+```js
+import { expect, test } from "vitest";
+import { mockGet } from "@lewishowles/testing/vue";
+import useApi from "@/composables/api/use-api";
 
 test("loads the member", async () => {
-	apiMock.api.get.mockResolvedValue({ id: "7" });
+	mockGet.mockResolvedValue({ id: "7" });
 
 	expect(await useApi().get("/members/7")).toEqual({ id: "7" });
-	expect(apiMock.api.get).toHaveBeenCalledWith("/members/7");
+	expect(mockGet).toHaveBeenCalledWith("/members/7");
 });
 ```
 
-`reset()` puts the API back as it was created: it removes members added since, restores replaced ones and each spy's implementation, clears call history and one-off queued responses, and returns state values to their starting values. Tests keep the same API and state objects, so references taken before a reset still work.
+If your app's composable has extra methods, spread `mockApiModule` in your setup file and add them to its default export. Clear your extra spies in your own `afterEach` hook; `setupVueTests()` resets only the shared members.
+
+```js
+// test/unit/setup.js
+import { afterEach, vi } from "vitest";
+import { setupVueTests } from "@lewishowles/testing/vue";
+
+const mockUpload = vi.hoisted(() => vi.fn());
+
+vi.mock("@/composables/api/use-api", async () => {
+	const { mockApiModule } = await import("@lewishowles/testing/vue");
+	const api = { ...mockApiModule.default(), upload: mockUpload };
+
+	return {
+		...mockApiModule,
+		default: () => api,
+	};
+});
+
+setupVueTests();
+afterEach(() => mockUpload.mockReset());
+```
+
+A test can call the extra method through `useApi().upload`. To inspect its calls directly, export `mockUpload` from a shared module and import it in both the setup file and the test.
+
+For one test that calls the real module directly, use `const { default: useRealApi } = await vi.importActual("@/composables/api/use-api")` inside that test. Ordinary imports in the same file still use the shared mock.
+
+For an entire test file that needs the real module, place `vi.unmock(path)` at the top of that file before importing it:
+
+```js
+import { vi } from "vitest";
+
+vi.unmock("@/composables/api/use-api");
+
+import useApi from "@/composables/api/use-api";
+```
 
 ### `createDeepMount(component, defaultOptions?)`
 
