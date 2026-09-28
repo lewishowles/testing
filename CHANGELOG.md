@@ -1,14 +1,24 @@
 # Changelog
 
-## Unreleased
+## 1.3.0 — 2026-09-28
+
+### Added
+
+- `mountComposable` runs a composable inside a mounted test component, so it can use lifecycle hooks and `inject`.
+- `createStubs` creates component stubs that render their slots.
+- `setupVueTests` installs `getByData` and `getAllByData` wrapper lookups, and `toExist` and `toHaveAttribute` wrapper matchers.
+- `mockGet`, `mockPost`, `mockPut`, `mockPatch`, `mockDelete`, `mockHead`, `mockOptions`, `mockSetAuthToken`, `mockHasAuthToken`, `mockIsLoading`, and `mockIsReady` provide shared API spies. `mockApiModule` combines them for module mocks.
+- `mockRouter`, `mockRoute`, `setRoute`, and `mockRouterModule` provide router mocks for component tests.
+- `createMount` accepts a list of components to stub.
 
 ### Changed
 
-- `mockLocalStorage` now stores values like browser storage while keeping its methods as spies. Missing keys return `null` instead of `undefined`. Stored values last until the next `mockLocalStorage()` call, so call it in `beforeEach` to give each test an empty store.
+- `mockLocalStorage` now stores values like browser storage while keeping its methods as spies. Missing keys return `null` instead of `undefined`, so tests expecting `undefined` will fail. Stored values last until the next `mockLocalStorage()` call, so call it in `beforeEach` to give each test an empty store.
+- The published package no longer includes test files.
 
 ### Deprecated
 
-- `setupVueTests` replaces `setupVueMounting`. The old name still works, but it is deprecated and will be removed in the next major release.
+- `setupVueMounting` is now a deprecated alias of `setupVueTests` and will be removed in the next major release.
 
 ## 1.2.1 — 2026-08-03
 
