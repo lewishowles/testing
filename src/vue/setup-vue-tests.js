@@ -2,13 +2,15 @@ import { afterEach, expect } from "vite-plus/test";
 import { cleanupMountedWrappers } from "./create-mount.js";
 import { installDataTestPlugin } from "./data-test-plugin.js";
 import { resetApiMocks } from "./mock-api.js";
+import { resetRouterMocks } from "./mock-router.js";
 import { wrapperMatchers } from "./wrapper-matchers.js";
 
 /**
  * Adds the `getByData` and `getAllByData` lookups to Vue Test Utils wrappers
  * and registers the `toExist` and `toHaveAttribute` matchers for them. It also
  * registers an `afterEach` hook that unmounts wrappers from `createMount`,
- * `createDeepMount`, and `mountComposable`, then resets the shared API mocks.
+ * `createDeepMount`, and `mountComposable`, then resets the shared API and
+ * router mocks.
  *
  * Call once in the project's Vitest setup file.
  */
@@ -19,6 +21,7 @@ export function setupVueTests() {
 	afterEach(() => {
 		cleanupMountedWrappers();
 		resetApiMocks();
+		resetRouterMocks();
 	});
 }
 

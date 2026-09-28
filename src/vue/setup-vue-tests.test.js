@@ -2,6 +2,7 @@ import { describe, expect, test } from "vite-plus/test";
 import { defineComponent, h } from "vue";
 import { createMount } from "./create-mount.js";
 import { mockGet } from "./mock-api.js";
+import { mockRoute, mockRouter, setRoute } from "./mock-router.js";
 import { setupVueTests } from "./setup-vue-tests.js";
 
 // Track component unmounts to verify the registered afterEach hook.
@@ -18,6 +19,8 @@ const TestComponent = defineComponent({
 		unmountCount += 1;
 
 		mockGet();
+		mockRouter.push("/after-unmount");
+		setRoute({ path: "/after-unmount" });
 	},
 	/**
 	 * Renders a component for the cleanup test to mount.
@@ -39,8 +42,11 @@ describe("setupVueTests", () => {
 		mount();
 	});
 
-	test("unmounts wrappers created by createMount, then resets the API mocks", () => {
+	test("unmounts wrappers before resetting the shared API and router mocks", () => {
 		expect(unmountCount).toBe(1);
 		expect(mockGet).not.toHaveBeenCalled();
+		expect(mockRouter.push).not.toHaveBeenCalled();
+		expect(mockRoute.path).toBe("/");
+		expect(mockRouter.resolve("/ready").href).toBe("/ready");
 	});
 });

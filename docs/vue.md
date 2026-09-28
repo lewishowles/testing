@@ -8,7 +8,7 @@ Component mounting utilities for Vitest + `@vue/test-utils`.
 - `pinia`
 - `@pinia/colada`
 
-`vue-router` is needed in a test project that uses `createRouterMock`.
+`vue-router` is needed in a test project that uses the shared router mocks.
 
 ## Exports
 
@@ -112,41 +112,43 @@ const mount = createMount(Page, {
 
 The generated component keeps its name for `findComponent({ name: "PageTitle" })`. Declared props are available through `wrapper.props()` on that stub. Listed slots render directly inside the stub element, without slot props or extra wrappers.
 
-### `createRouterMock()`
+### Shared router mocks
 
-Creates a reactive route and router spies for tests that replace `vue-router`. The route starts with `name: null`, empty `params`, `query`, `matched`, and `meta`, and `path: "/"`. The router has `push`, `replace`, `back`, `resolve`, and `getRoutes` spies. By default, `resolve` returns a route-like object with an `href`, and `getRoutes` returns an empty array.
+The package exports `mockRoute`, `mockRouter`, `setRoute`, and `mockRouterModule`. The reactive route starts with `name: null`, empty `params`, `query`, `matched`, and `meta`, and `path: "/"`. The router has `push`, `replace`, `back`, `resolve`, and `getRoutes` spies. By default, `resolve` returns a route-like object with an `href`, and `getRoutes` returns an empty array.
 
-Create the mock inside `vi.hoisted`, then pass its module exports to `vi.mock` in the test file:
+Mock `vue-router` once in your project's Vitest setup file, alongside `setupVueTests()`:
 
 ```js
-import { expect, vi } from "vitest";
-import { useRoute, useRouter } from "vue-router";
+import { vi } from "vitest";
+import { setupVueTests } from "@lewishowles/testing/vue";
 
-const routerMock = await vi.hoisted(async () =>
-	(await import("@lewishowles/testing/vue")).createRouterMock(),
-);
+setupVueTests();
 
-vi.mock("vue-router", () => routerMock);
-
-routerMock.setRoute({ name: "member", params: { id: "7" } });
-
-expect(useRoute().params.id).toBe("7");
-expect(useRouter()).toBe(routerMock.router);
+vi.mock("vue-router", async () => (await import("@lewishowles/testing/vue")).mockRouterModule);
 ```
 
-`setRoute` changes the same reactive route object. Fields left out of a call return to their defaults. Call `reset()` in `afterEach` to restore the route, clear all router spy calls, and undo any overrides a test set on the spies.
-
-For a partial mock, keep the real exports and replace only `useRoute` and `useRouter`:
+Tests import the shared objects to set the route and check navigation calls:
 
 ```js
-const routerMock = await vi.hoisted(async () =>
-	(await import("@lewishowles/testing/vue")).createRouterMock(),
-);
+import { expect, test } from "vitest";
+import { mockRoute, mockRouter, setRoute } from "@lewishowles/testing/vue";
 
+test("navigates from the member route", () => {
+	setRoute({ name: "member", params: { id: "7" } });
+
+	expect(mockRoute.params.id).toBe("7");
+	expect(mockRouter.push).not.toHaveBeenCalled();
+});
+```
+
+`setRoute` changes the same route object and restores defaults for omitted fields. After each test, `setupVueTests()` clears router spy calls and overrides, drops queued one-off responses, and restores the default route. The route, router, and spies keep their identities.
+
+If your code also imports other `vue-router` exports, such as `createRouter`, use this partial mock in the setup file instead of the full mock above. It keeps the real exports and replaces only `useRoute` and `useRouter`:
+
+```js
 vi.mock("vue-router", async (importOriginal) => ({
 	...(await importOriginal()),
-	useRoute: routerMock.useRoute,
-	useRouter: routerMock.useRouter,
+	...(await import("@lewishowles/testing/vue")).mockRouterModule,
 }));
 ```
 

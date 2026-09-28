@@ -1,7 +1,7 @@
 import type { Mock } from "vitest";
 
 /**
- * The route fields that tests can replace between assertions.
+ * The current route that the mocked `useRoute` returns.
  */
 export interface MockRoute {
 	/**
@@ -31,9 +31,13 @@ export interface MockRoute {
 }
 
 /**
- * A resolved location with the link target that consumers can read.
+ * A resolved location with the link target that callers can read.
  */
-export interface MockResolvedRoute extends MockRoute {
+export interface MockResolvedRoute extends Omit<MockRoute, "params"> {
+	/**
+	 * The path segments passed to `resolve`, including numeric values.
+	 */
+	params: Record<string, string | number | (string | number)[]>;
 	/**
 	 * The link target, taken from the location's path.
 	 */
@@ -74,18 +78,26 @@ export interface MockRouter {
 	getRoutes: Mock<() => unknown[]>;
 }
 
-/**
- * Creates a reactive route and router spies for a `vue-router` module mock.
- * `setRoute` restores omitted fields to their defaults. `reset` clears every
- * router spy and undoes any overrides set by a test.
- *
- * @returns  The mock module exports and controls for each test.
- */
-export declare function createRouterMock(): {
-	route: MockRoute;
-	router: MockRouter;
+// The reactive route shared by every mocked `useRoute` call.
+export declare const mockRoute: MockRoute;
+
+// The router spies shared by every mocked `useRouter` call.
+export declare const mockRouter: MockRouter;
+
+// The exports to return from a project's `vue-router` module mock.
+export declare const mockRouterModule: {
 	useRoute: () => MockRoute;
 	useRouter: () => MockRouter;
-	setRoute: (fields: Partial<MockRoute>) => void;
-	reset: () => void;
 };
+
+/**
+ * Sets the current route, returns omitted fields to their defaults, and removes
+ * extra fields left by earlier changes. The route keeps its identity so
+ * existing route readers see the new values.
+ *
+ * @param  fields  The route fields to set for the current test.
+ *
+ * @example
+ * setRoute({ name: "member", params: { id: "7" } });
+ */
+export declare function setRoute(fields: Partial<MockRoute>): void;

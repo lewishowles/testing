@@ -18,7 +18,7 @@ export {
 	createMount,
 	mountComposable,
 } from "./create-mount.js";
-export { createRouterMock } from "./create-router-mock.js";
+export { mockRoute, mockRouter, mockRouterModule, setRoute } from "./mock-router.js";
 export { createStubs } from "./create-stubs.js";
 export { setupVueMounting, setupVueTests } from "./setup-vue-tests.js";
 export { withAppContext } from "./with-app-context.js";
