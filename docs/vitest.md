@@ -13,66 +13,64 @@ Vitest helpers for browser API mocking, Pinia setup, and console suppression.
 
 ### Mock API composables
 
-Keep API module mocks in your project, close to the module shape they replace. `@lewishowles/testing` provides the general Vitest helpers; the local test helper should own the literal `vi.mock(...)` call and the adapter for your composable, SDK, class, or named exports.
+Declare `vi.mock(...)` in each test file that needs the API mock, or in a Vitest setup file that runs before every test file. Vitest hoists the call within the file where it appears. A mock declared in an imported helper depends on that helper loading before the code under test; import sorting can change the order and leave the real module in place without an error.
 
-Use `vi.hoisted` for mock handlers referenced by `vi.mock(...)`, then export the handlers so tests can set responses and assert calls.
-
-```js
-import { beforeEach, vi } from "vitest";
-
-const mockGet = vi.hoisted(() => vi.fn());
-const mockPost = vi.hoisted(() => vi.fn());
-const mockIsLoading = vi.hoisted(() => ({ value: false }));
-const mockIsReady = vi.hoisted(() => ({ value: false }));
-
-vi.mock("@/composables/api/use-api", () => ({
-	default: () => ({
-		get: mockGet,
-		isLoading: mockIsLoading,
-		isReady: mockIsReady,
-		post: mockPost,
-	}),
-}));
-
-beforeEach(() => {
-	vi.clearAllMocks();
-});
-
-export default {
-	get: mockGet,
-	isLoading: mockIsLoading,
-	isReady: mockIsReady,
-	post: mockPost,
-};
-```
-
-Tests can import the local helper and use normal Vitest mock APIs.
+Import shared fakes normally to set responses and check calls. Inside the mock factory, load the module shape with a dynamic `import()`, because Vitest moves `vi.mock(...)` above the file's imports, so the factory cannot use them. For an API composable whose default export returns `get`, `post`, `isLoading`, and `isReady`, `mockApiModule` provides that shape. See [Shared API mocks](vue.md#shared-api-mocks) for its full API and reset behaviour.
 
 ```js
-import mockApi from "@test/unit/support/mock-api";
+import { expect, test, vi } from "vitest";
+import { mockGet } from "@lewishowles/testing/vue";
+import { loadItems } from "@/items";
+
+vi.mock(
+	"@/composables/api/use-api",
+	async () => (await import("@lewishowles/testing/vue")).mockApiModule,
+);
 
 test("loads items", async () => {
-	mockApi.get.mockResolvedValue({ items: [] });
+	mockGet.mockResolvedValue({ items: [] });
 
 	await loadItems();
 
-	expect(mockApi.get).toHaveBeenCalledWith("items");
+	expect(mockGet).toHaveBeenCalledWith("items");
 });
 ```
 
-For SDK clients, keep the SDK-specific shape in the local helper too.
+For an SDK client with a different shape, keep only its shared fakes in a local helper. Declare the SDK mock in each test file and import those fakes inside the factory:
 
 ```js
-const mockGet = vi.hoisted(() => vi.fn());
+// test/unit/support/mock-sdk.js
+import { vi } from "vitest";
 
-vi.mock("@vendor/sdk", () => ({
-	Client: class {
-		get = mockGet;
-	},
-}));
+export const mockGet = vi.fn();
 ```
 
-Do not hide `vi.mock(...)` inside an imported package helper. Vitest needs to see literal mock calls in the test module or its local helper so they can be hoisted before imports.
+```js
+// sdk.test.js
+import { expect, test, vi } from "vitest";
+import { mockGet } from "@test/unit/support/mock-sdk";
+import { Client } from "@vendor/sdk";
+
+vi.mock("@vendor/sdk", async () => {
+	const { mockGet } = await import("@test/unit/support/mock-sdk");
+
+	return {
+		Client: class {
+			get = mockGet;
+		},
+	};
+});
+
+test("requests items", async () => {
+	await new Client().get("items");
+
+	expect(mockGet).toHaveBeenCalledWith("items");
+});
+```
+
+Reset these fakes in your own `afterEach` hook (for example `mockGet.mockReset()`), or turn on Vitest's `mockReset` option, because `setupVueTests()` resets only the package's shared spies.
+
+When every test file needs the same mock, declare `vi.mock(...)` in the Vitest setup file instead. Keep the fakes in a shared module so tests can import them for responses and assertions.
 
 ### `mockLocalStorage()`
 

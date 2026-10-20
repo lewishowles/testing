@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Documentation
+
+- The Vitest guide now tells you to declare API mocks in each test file or a setup file, so import sorting can no longer leave the real module in place.
+
 ## 1.3.0 — 2026-09-28
 
 ### Added
