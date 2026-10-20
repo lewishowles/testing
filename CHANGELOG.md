@@ -1,10 +1,11 @@
 # Changelog
 
-## Unreleased
+## 1.3.1 — 2026-10-20
 
 ### Documentation
 
 - The Vitest guide now tells you to declare API mocks in each test file or a setup file, so import sorting can no longer leave the real module in place.
+- The Vue guide now tells you to reset the extra API spies between tests, rather than clear them.
 
 ## 1.3.0 — 2026-09-28
 
