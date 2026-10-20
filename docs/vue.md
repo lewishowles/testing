@@ -188,7 +188,7 @@ test("loads the member", async () => {
 });
 ```
 
-If your app's composable has extra methods, spread `mockApiModule` in your setup file and add them to its default export. Clear your extra spies in your own `afterEach` hook; `setupVueTests()` resets only the shared members.
+If your app's composable has extra methods, spread `mockApiModule` in your setup file and add them to its default export. Reset your extra spies in your own `afterEach` hook; `setupVueTests()` resets only the shared members.
 
 ```js
 // test/unit/setup.js
